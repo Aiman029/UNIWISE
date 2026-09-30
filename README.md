@@ -71,7 +71,7 @@ Sistem web yang membantu graduan SPM mendapat cadangan program pengajian (Diplom
   - Markah **Ko-kurikulum** (0.00–10.00)
 - Data disimpan merentasi `users` (aliran, kokurikulum) dan `spm_results` (subjek, gred, kategori)
 
-### Formula merit yang digunakan (rujukan JPT, Formula Merit 2.0)
+### Formula merit yang digunakan (rujukan JPT, Formula Merit 2.0) 
 1. Tukar gred → markah: `A+=18, A=16, A-=14, B+=12, B=10, C+=8, C=6, D=4, E=2, G=0`
 2. Universal (40%): jumlah 4 subjek wajib ÷ 72 × 40
 3. Pakej (30%): jumlah 2 subjek ÷ 36 × 30 (STEM C: 1 subjek ÷ 18)
@@ -86,7 +86,7 @@ Sistem web yang membantu graduan SPM mendapat cadangan program pengajian (Diplom
 
 ## Yang Belum Dibina
 
-### 3b. Kuiz RIASEC
+### 3b. Kuiz RIASEC ✅ Selesai
 - Paparan 30 soalan Likert-scale
 - Simpan jawapan ke `riasec_responses`
 - Kira skor 6 kategori RIASEC, tentukan jenis personaliti dominan

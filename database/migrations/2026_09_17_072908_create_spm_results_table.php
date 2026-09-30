@@ -14,6 +14,7 @@ public function up(): void
     Schema::create('spm_results', function (Blueprint $table) {
         $table->id();
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        $table->string('stream')->nullable();
         $table->string('subject');
         $table->string('grade', 5);
         $table->timestamps();

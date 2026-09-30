@@ -15,6 +15,11 @@ public function up(): void
         $table->id();
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
         $table->foreignId('programme_id')->constrained()->onDelete('cascade');
+        $table->string('session_id')->nullable()->index();
+        $table->decimal('merit_score', 5, 2)->nullable();
+        $table->string('dominant_trait')->nullable();
+        $table->json('riasec_scores')->nullable();
+        $table->json('spm_snapshot')->nullable();
         $table->timestamp('date_generated')->useCurrent();
         $table->timestamps();
     });

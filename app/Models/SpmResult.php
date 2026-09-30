@@ -9,7 +9,7 @@ class SpmResult extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'subject', 'grade'];
+    protected $fillable = ['user_id', 'stream', 'subject', 'grade'];
 
     public function user()
     {
