@@ -9,7 +9,15 @@ class Programme extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'level', 'institution', 'entry_requirement'];
+    protected $fillable = [
+        'name',
+        'code',
+        'level',
+        'institution',
+        'merit',
+        'entry_requirement',
+        'notes',
+    ];
 
     public function rules()
     {

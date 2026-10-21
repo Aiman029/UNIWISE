@@ -73,7 +73,7 @@ class AcademicResultController extends Controller
     {
         $request->validate([
             'stream' => 'required|string',
-            'results' => 'required|array|min:5',
+            'results' => 'required|array|min:4',
             'results.*.subject' => 'required|string',
             'results.*.grade' => 'required|string|in:' . implode(',', self::GRADES),
         ]);

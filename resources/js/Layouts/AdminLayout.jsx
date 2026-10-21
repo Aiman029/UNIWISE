@@ -51,6 +51,15 @@ export default function AdminLayout({ children, activePage = 'dashboard' }) {
                         <Shield className="w-3.5 h-3.5 text-amber-200" />
                         <span>{user?.name || 'Admin 1'}</span>
                     </div>
+
+                    <button
+                        onClick={handleLogout}
+                        title="Log Keluar ke Laman Utama"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-950/70 hover:bg-rose-600 text-white text-xs font-bold border border-white/20 transition shadow-sm group"
+                    >
+                        <LogOut className="w-3.5 h-3.5 group-hover:scale-110 transition" />
+                        <span>Log Keluar</span>
+                    </button>
                 </div>
             </header>
 

@@ -10,6 +10,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RiasecQuestionSeeder::class,
+            UniversitySeeder::class,
             ProgrammeSeeder::class,
             RecommendationRuleSeeder::class,
             AdminSeeder::class,

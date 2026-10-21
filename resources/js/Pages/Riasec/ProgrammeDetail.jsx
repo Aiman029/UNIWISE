@@ -27,10 +27,23 @@ export default function ProgrammeDetail({ programme }) {
                         <div>
                             <span className="text-xs font-extrabold uppercase tracking-widest text-amber-300">
                                 {programme.institution} • {programme.level}
+                                {programme.code && ` • ${programme.code}`}
                             </span>
                             <h1 className="text-2xl md:text-3xl font-black uppercase mt-1 leading-tight">
                                 {programme.name}
                             </h1>
+                            <div className="flex flex-wrap items-center gap-2 mt-2">
+                                {programme.merit && (
+                                    <span className="text-xs font-bold text-sky-900 bg-amber-300 px-2.5 py-1 rounded-lg">
+                                        Purata Merit UPU: {programme.merit}%
+                                    </span>
+                                )}
+                                {programme.notes && programme.notes !== '-' && (
+                                    <span className="text-xs font-semibold text-white bg-sky-700/80 px-2.5 py-1 rounded-lg border border-sky-400/50">
+                                        {programme.notes}
+                                    </span>
+                                )}
+                            </div>
                         </div>
                     </div>
 

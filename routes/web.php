@@ -9,6 +9,9 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
+// Public Course & University Explorer Directory (SRS Enhancement)
+Route::get('directory', [\App\Http\Controllers\DirectoryController::class, 'index'])->name('directory.index');
+
 // Guest routes
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
@@ -48,4 +51,27 @@ Route::middleware('auth')->group(function () {
 // Admin-only routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+
+    // User Accounts Management (SRS 3.2.1.6)
+    Route::get('users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+    Route::put('users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
+    Route::patch('users/{user}/toggle-status', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggle-status');
+
+    // Programme Info Management (SRS 3.2.1.7)
+    Route::get('programmes', [\App\Http\Controllers\Admin\ProgrammeController::class, 'index'])->name('programmes.index');
+    Route::post('programmes', [\App\Http\Controllers\Admin\ProgrammeController::class, 'store'])->name('programmes.store');
+    Route::put('programmes/{programme}', [\App\Http\Controllers\Admin\ProgrammeController::class, 'update'])->name('programmes.update');
+    Route::delete('programmes/{programme}', [\App\Http\Controllers\Admin\ProgrammeController::class, 'destroy'])->name('programmes.destroy');
+
+    // RIASEC Question Management (SRS 3.2.1.8)
+    Route::get('riasec-questions', [\App\Http\Controllers\Admin\RiasecQuestionController::class, 'index'])->name('riasec-questions.index');
+    Route::post('riasec-questions', [\App\Http\Controllers\Admin\RiasecQuestionController::class, 'store'])->name('riasec-questions.store');
+    Route::put('riasec-questions/{question}', [\App\Http\Controllers\Admin\RiasecQuestionController::class, 'update'])->name('riasec-questions.update');
+    Route::delete('riasec-questions/{question}', [\App\Http\Controllers\Admin\RiasecQuestionController::class, 'destroy'])->name('riasec-questions.destroy');
+
+    // Recommendation Rules Management (SRS 3.2.1.9)
+    Route::get('recommendation-rules', [\App\Http\Controllers\Admin\RecommendationRuleController::class, 'index'])->name('recommendation-rules.index');
+    Route::post('recommendation-rules', [\App\Http\Controllers\Admin\RecommendationRuleController::class, 'store'])->name('recommendation-rules.store');
+    Route::put('recommendation-rules/{rule}', [\App\Http\Controllers\Admin\RecommendationRuleController::class, 'update'])->name('recommendation-rules.update');
+    Route::delete('recommendation-rules/{rule}', [\App\Http\Controllers\Admin\RecommendationRuleController::class, 'destroy'])->name('recommendation-rules.destroy');
 });

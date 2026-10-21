@@ -1,0 +1,128 @@
+[
+  {
+    "id": 1,
+    "code": "UTHM",
+    "name": "Universiti Tun Hussein Onn Malaysia",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 2,
+    "code": "UUM",
+    "name": "Universiti Utara Malaysia",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 3,
+    "code": "UTEM",
+    "name": "Universiti Teknikal Malaysia Melaka",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 4,
+    "code": "USIM",
+    "name": "Universiti Sains Islam Malaysia",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 5,
+    "code": "UPSI",
+    "name": "Universiti Pendidikan Sultan Idris",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 6,
+    "code": "UPNM",
+    "name": "Universiti Pertahanan Nasional Malaysia",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 7,
+    "code": "UPM",
+    "name": "Universiti Putra Malaysia",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 8,
+    "code": "POLITEKNIK",
+    "name": "Politeknik",
+    "type": "Institusi TVET Awam"
+  },
+  {
+    "id": 9,
+    "code": "UNISZA",
+    "name": "Universiti Sultan Zainal Abidin",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 10,
+    "code": "UNIMAS",
+    "name": "Universiti Malaysia Sarawak",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 11,
+    "code": "UNIMAP",
+    "name": "Universiti Malaysia Perlis",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 12,
+    "code": "UMT",
+    "name": "Universiti Malaysia Terengganu",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 13,
+    "code": "UMS",
+    "name": "Universiti Malaysia Sabah",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 14,
+    "code": "UMK",
+    "name": "Universiti Malaysia Kelantan",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 15,
+    "code": "UMPSA",
+    "name": "Universiti Malaysia Pahang Al-Sultan Abdullah",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 16,
+    "code": "UM",
+    "name": "Universiti Malaya",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 17,
+    "code": "UKM",
+    "name": "Universiti Kebangsaan Malaysia",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 18,
+    "code": "UITM",
+    "name": "Universiti Teknologi Mara",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 19,
+    "code": "UIAM",
+    "name": "Universiti Islam Antarabangsa Malaysia",
+    "type": "IPTA / Universiti Awam"
+  },
+  {
+    "id": 20,
+    "code": "MARA, BPT",
+    "name": "Mara, Bahagian Pendidikan Tinggi",
+    "type": "Institusi Awam / MARA"
+  },
+  {
+    "id": 21,
+    "code": "KOLEJ KOMUNITI",
+    "name": "Kolej Komuniti",
+    "type": "Institusi TVET Awam"
+  }
+]
