@@ -10,6 +10,7 @@ import {
     HelpCircle,
     CheckCircle,
 } from 'lucide-react';
+import { DataUploadOverlay } from '@/Components/Skeleton';
 
 export default function Index({
     existingResults = [],
@@ -501,6 +502,14 @@ export default function Index({
                         </div>
                     </div>
                 </div>
+            )}
+            {/* Skeleton Loading Overlay while Uploading / Saving SPM Data */}
+            {isSaving && (
+                <DataUploadOverlay
+                    title="Sedang Menyimpan & Memuat Naik Keputusan SPM..."
+                    subtitle="Sistem sedang mengesahkan gred, mengira markah merit akademik secara rasmi, dan menyelaraskan rekod anda."
+                    badge="Pengiraan Merit KPM"
+                />
             )}
         </UserLayout>
     );

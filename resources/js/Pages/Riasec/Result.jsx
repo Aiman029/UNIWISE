@@ -222,7 +222,7 @@ export default function Result({
                         >
                             <div>
                                 <span className="text-[11px] font-bold block">Peluang Tinggi</span>
-                                <span className="text-[10px] opacity-80">Merit $\ge$ Cut-off</span>
+                                <span className="text-[10px] opacity-80">Merit ≥ Cut-off</span>
                             </div>
                             <span className="text-lg font-black">{stats.tinggi}</span>
                         </button>
@@ -238,7 +238,7 @@ export default function Result({
                         >
                             <div>
                                 <span className="text-[11px] font-bold block">Berdaya Saing</span>
-                                <span className="text-[10px] opacity-80">Jurang $\le$ 3.5%</span>
+                                <span className="text-[10px] opacity-80">Jurang ≤ 3.5%</span>
                             </div>
                             <span className="text-lg font-black">{stats.sederhana}</span>
                         </button>

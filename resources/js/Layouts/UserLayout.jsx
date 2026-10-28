@@ -18,12 +18,14 @@ import {
     ChevronDown,
     ChevronRight,
 } from 'lucide-react';
+import { PageSkeleton } from '@/Components/Skeleton';
 
 export default function UserLayout({ children, activePage = 'dashboard' }) {
     const { auth, flash = {} } = usePage().props;
     const user = auth?.user;
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
+    const [isPageLoading, setIsPageLoading] = useState(false);
 
     // Close drawers on Escape key
     useEffect(() => {
@@ -35,6 +37,34 @@ export default function UserLayout({ children, activePage = 'dashboard' }) {
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
+    // Listen to Inertia router events for global skeleton and progress loading
+    useEffect(() => {
+        let timer = null;
+        const unbindStart = router.on('start', () => {
+            // Small buffer to avoid flashing on ultra-fast sub-50ms transitions
+            timer = setTimeout(() => {
+                setIsPageLoading(true);
+            }, 80);
+        });
+
+        const unbindFinish = router.on('finish', () => {
+            if (timer) clearTimeout(timer);
+            setIsPageLoading(false);
+        });
+
+        const unbindError = router.on('error', () => {
+            if (timer) clearTimeout(timer);
+            setIsPageLoading(false);
+        });
+
+        return () => {
+            if (timer) clearTimeout(timer);
+            unbindStart();
+            unbindFinish();
+            unbindError();
+        };
     }, []);
 
     const navItems = [
@@ -61,6 +91,12 @@ export default function UserLayout({ children, activePage = 'dashboard' }) {
 
     return (
         <div className="min-h-screen bg-slate-50/70 flex flex-col font-sans text-slate-800 antialiased selection:bg-sky-500 selection:text-white">
+            {/* Top Global Progress Bar on Data Loading */}
+            {isPageLoading && (
+                <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-amber-200/40 overflow-hidden pointer-events-none">
+                    <div className="h-full bg-gradient-to-r from-amber-500 via-sky-500 to-indigo-600 animate-indeterminate" />
+                </div>
+            )}
             {/* Top Navbar */}
             <header className="bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 text-white shadow-md px-4 sm:px-6 py-3 flex justify-between items-center sticky top-0 z-40 border-b border-amber-600/30">
                 <div className="flex items-center gap-3">
@@ -298,8 +334,23 @@ export default function UserLayout({ children, activePage = 'dashboard' }) {
                 </aside>
 
                 {/* Main Content Area */}
-                <main className="flex-1 p-5 md:p-8 overflow-y-auto max-w-7xl mx-auto w-full animate-fade-in">
-                    {children}
+                <main className="flex-1 p-5 md:p-8 overflow-y-auto max-w-7xl mx-auto w-full animate-fade-in relative min-h-[500px]">
+                    {isPageLoading ? (
+                        <div className="space-y-4 animate-fade-in">
+                            <div className="flex items-center justify-between p-3.5 bg-sky-50/90 border border-sky-200/80 rounded-2xl text-xs font-bold text-sky-800 shadow-xs mb-4">
+                                <div className="flex items-center gap-2.5">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping shrink-0" />
+                                    <span>Sedang memuat naik data... Sila tunggu sebentar.</span>
+                                </div>
+                                <span className="text-[10px] uppercase font-black text-sky-700 bg-white px-2.5 py-0.5 rounded-lg border border-sky-200 shadow-2xs shrink-0">
+                                    UniWise Data Sync
+                                </span>
+                            </div>
+                            <PageSkeleton page={activePage} />
+                        </div>
+                    ) : (
+                        children
+                    )}
                 </main>
             </div>
         </div>

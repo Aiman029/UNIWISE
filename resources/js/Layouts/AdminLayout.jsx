@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
 import {
     LayoutDashboard,
@@ -11,10 +11,33 @@ import {
     AlertCircle,
     Shield,
 } from 'lucide-react';
+import { CardSkeleton } from '@/Components/Skeleton';
 
 export default function AdminLayout({ children, activePage = 'dashboard' }) {
     const { auth, flash = {} } = usePage().props;
     const user = auth?.user;
+    const [isPageLoading, setIsPageLoading] = useState(false);
+
+    useEffect(() => {
+        let timer = null;
+        const unbindStart = router.on('start', () => {
+            timer = setTimeout(() => setIsPageLoading(true), 80);
+        });
+        const unbindFinish = router.on('finish', () => {
+            if (timer) clearTimeout(timer);
+            setIsPageLoading(false);
+        });
+        const unbindError = router.on('error', () => {
+            if (timer) clearTimeout(timer);
+            setIsPageLoading(false);
+        });
+        return () => {
+            if (timer) clearTimeout(timer);
+            unbindStart();
+            unbindFinish();
+            unbindError();
+        };
+    }, []);
 
     const navItems = [
         { id: 'dashboard', label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
@@ -30,6 +53,12 @@ export default function AdminLayout({ children, activePage = 'dashboard' }) {
 
     return (
         <div className="min-h-screen bg-slate-100 flex flex-col font-sans text-slate-800">
+            {/* Top Loading Progress Bar */}
+            {isPageLoading && (
+                <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-amber-200/40 overflow-hidden pointer-events-none">
+                    <div className="h-full bg-gradient-to-r from-amber-500 via-sky-500 to-indigo-600 animate-indeterminate" />
+                </div>
+            )}
             {/* Top Navbar matching Figure 3.2.1.1.6 */}
             <header className="bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 text-white shadow-sm px-6 py-3 flex justify-between items-center sticky top-0 z-30">
                 <div className="flex items-center gap-3">
@@ -127,8 +156,28 @@ export default function AdminLayout({ children, activePage = 'dashboard' }) {
                 </aside>
 
                 {/* Main Content Area */}
-                <main className="flex-1 p-6 md:p-8 overflow-y-auto max-w-7xl mx-auto w-full">
-                    {children}
+                <main className="flex-1 p-6 md:p-8 overflow-y-auto max-w-7xl mx-auto w-full relative min-h-[500px]">
+                    {isPageLoading ? (
+                        <div className="space-y-6 animate-fade-in">
+                            <div className="flex items-center justify-between p-3.5 bg-sky-50 border border-sky-200 rounded-2xl text-xs font-bold text-sky-800">
+                                <div className="flex items-center gap-2">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping" />
+                                    <span>Memuatkan data pentadbir... Sila tunggu sebentar.</span>
+                                </div>
+                                <span className="text-[10px] uppercase font-black text-sky-600 bg-white px-2 py-0.5 rounded border border-sky-200">
+                                    Admin Sync
+                                </span>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <CardSkeleton />
+                                <CardSkeleton />
+                                <CardSkeleton />
+                            </div>
+                            <CardSkeleton className="min-h-[250px]" />
+                        </div>
+                    ) : (
+                        children
+                    )}
                 </main>
             </div>
         </div>
