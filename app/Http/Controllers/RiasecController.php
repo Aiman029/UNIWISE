@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Programme;
 use App\Models\Recommendation;
-use App\Models\RecommendationRule;
 use App\Models\RiasecQuestion;
 use App\Models\RiasecResponse;
 use App\Models\SpmResult;
+use App\Services\ImksCalculator;
 use App\Services\MeritCalculator;
+use App\Services\RiasecMatcher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -19,34 +20,34 @@ class RiasecController extends Controller
 {
     public const TRAIT_DESCRIPTIONS = [
         'Realistic' => [
-            'name' => 'REALISTIC',
-            'tagline' => 'The Doers',
-            'description' => 'You are practical, hands-on, and enjoy working with tools, machines, mechanics, and physical tasks. You thrive in practical problem-solving environments and concrete results.',
+            'name' => 'REALISTIK',
+            'tagline' => 'Pelaksana Praktikal',
+            'description' => 'Anda seorang yang praktikal, gemar aktiviti secara langsung, serta seronok bekerja dengan peralatan, mesin, mekanikal, dan tugasan fizikal. Anda menyerlah dalam penyelesaian masalah secara nyata dengan hasil yang konkrit.',
         ],
         'Investigative' => [
-            'name' => 'INVESTIGATION',
-            'tagline' => 'The Thinkers',
-            'description' => 'You are analytical, curious, and observant. You excel at solving complex problems, conducting research, analyzing data, understanding how things work, and discovering new ideas.',
+            'name' => 'INVESTIGATIF',
+            'tagline' => 'Pemikir Analitikal',
+            'description' => 'Anda seorang yang analitikal, ingin tahu, dan peka. Anda cemerlang dalam menyelesaikan masalah kompleks, menjalankan penyelidikan, menganalisis data, memahami cara sesuatu berfungsi, serta meneroka idea baharu.',
         ],
         'Artistic' => [
-            'name' => 'ARTISTIC',
-            'tagline' => 'The Creators',
-            'description' => 'You are creative, expressive, and original. You thrive in flexible, unstructured environments that encourage imagination, visual design, communication, and creative expression.',
+            'name' => 'ARTISTIK',
+            'tagline' => 'Pencipta Kreatif',
+            'description' => 'Anda seorang yang kreatif, ekspresif, dan asli. Anda menyerlah dalam persekitaran fleksibel yang menggalakkan imaginasi, reka bentuk visual, komunikasi, penulisan, dan ekspresi seni.',
         ],
         'Social' => [
-            'name' => 'SOCIAL',
-            'tagline' => 'The Helpers',
-            'description' => 'You are empathetic, cooperative, and patient. You enjoy teaching, guiding, caring for people, and working in teams to make a positive social impact.',
+            'name' => 'SOSIAL',
+            'tagline' => 'Pembimbing & Pembantu',
+            'description' => 'Anda seorang yang empati, bekerjasama, dan penyabar. Anda gemar mengajar, membimbing, membantu masyarakat, dan bekerja dalam pasukan untuk memberi impak sosial yang positif.',
         ],
         'Enterprising' => [
             'name' => 'ENTERPRISING',
-            'tagline' => 'The Persuaders',
-            'description' => 'You are confident, ambitious, and persuasive. You enjoy leadership, business initiatives, public speaking, negotiation, and driving teams towards achieving goals.',
+            'tagline' => 'Pemimpin & Penggerak',
+            'description' => 'Anda seorang yang yakin diri, bercita-cita tinggi, dan pandai memujuk. Anda gemar memimpin, menerajui inisiatif perniagaan, pengucapan awam, perundingan, serta menggerakkan pasukan mencapai matlamat.',
         ],
         'Conventional' => [
-            'name' => 'CONVENTIONAL',
-            'tagline' => 'The Organizers',
-            'description' => 'You are detail-oriented, systematic, and organized. You excel in working with structured data, records, numerical calculations, procedures, and established guidelines.',
+            'name' => 'KONVENSIONAL',
+            'tagline' => 'Pengurus Sistematik',
+            'description' => 'Anda seorang yang teliti, sistematik, dan teratur. Anda cemerlang menguruskan data berstruktur, rekod, pengiraan berangka, prosedur kerja, serta piawaian yang terperinci.',
         ],
     ];
 
@@ -57,23 +58,25 @@ class RiasecController extends Controller
     {
         $hasSpm = SpmResult::where('user_id', $request->user()->id)->exists();
         if (! $hasSpm) {
-            return redirect()->route('dashboard')->with('error', 'Please complete Academic Results first');
+            return redirect()->route('dashboard')->with('error', 'Sila lengkapkan Keputusan Akademik SPM terlebih dahulu.');
         }
 
         return Inertia::render('Riasec/Index');
     }
 
     /**
-     * Take the 30-question RIASEC quiz.
+     * Take the 170-question IMKS 2013 (Holland RIASEC) quiz.
      */
     public function quiz(Request $request): Response|RedirectResponse
     {
         $hasSpm = SpmResult::where('user_id', $request->user()->id)->exists();
         if (! $hasSpm) {
-            return redirect()->route('spm-results.index')->with('error', 'Please complete Academic Results first');
+            return redirect()->route('spm-results.index')->with('error', 'Sila lengkapkan Keputusan Akademik SPM terlebih dahulu.');
         }
 
-        $questions = RiasecQuestion::orderBy('id')->get();
+        $questions = RiasecQuestion::orderByRaw('COALESCE(question_number, id) asc')
+            ->orderBy('id')
+            ->get();
 
         return Inertia::render('Riasec/Quiz', [
             'questions' => $questions,
@@ -81,7 +84,7 @@ class RiasecController extends Controller
     }
 
     /**
-     * Submit responses, compute dominant trait, execute recommendation engine, save session snapshot.
+     * Submit responses, compute IMKS/RIASEC scores, execute recommendation engine, save session snapshot.
      */
     public function submit(Request $request): RedirectResponse
     {
@@ -89,20 +92,20 @@ class RiasecController extends Controller
 
         $hasSpm = SpmResult::where('user_id', $userId)->exists();
         if (! $hasSpm) {
-            return redirect()->route('spm-results.index')->with('error', 'Please complete Academic Results first');
+            return redirect()->route('spm-results.index')->with('error', 'Sila lengkapkan Keputusan Akademik SPM terlebih dahulu.');
         }
 
         $request->validate([
             'answers' => 'required|array',
             'answers.*.question_id' => 'required|exists:riasec_questions,id',
-            'answers.*.value' => 'required|in:0,1',
+            'answers.*.value' => 'required|in:0,1,Y,T,y,t',
         ]);
 
         // Save responses
         RiasecResponse::where('user_id', $userId)->delete();
         $questions = RiasecQuestion::all()->keyBy('id');
 
-        $scores = [
+        $legacyScores = [
             'Realistic' => 0,
             'Investigative' => 0,
             'Artistic' => 0,
@@ -113,7 +116,7 @@ class RiasecController extends Controller
 
         foreach ($request->answers as $ans) {
             $qId = $ans['question_id'];
-            $val = (int) $ans['value'];
+            $val = ImksCalculator::normalizeAnswerValue($ans['value']);
             $q = $questions->get($qId);
 
             if ($q) {
@@ -123,21 +126,27 @@ class RiasecController extends Controller
                     'answer_value' => $val,
                 ]);
 
-                if ($val === 1 && isset($scores[$q->category])) {
-                    $scores[$q->category]++;
+                if ($val === 1 && isset($legacyScores[$q->category])) {
+                    $legacyScores[$q->category]++;
                 }
             }
         }
 
-        // Determine dominant trait (with tie-breaking order R -> I -> A -> S -> E -> C)
-        $dominantTrait = 'Realistic';
-        $highestScore = -1;
-        foreach (['Realistic', 'Investigative', 'Artistic', 'Social', 'Enterprising', 'Conventional'] as $trait) {
-            if ($scores[$trait] > $highestScore) {
-                $highestScore = $scores[$trait];
-                $dominantTrait = $trait;
-            }
+        $isImks = $questions->contains(fn ($q) => !empty($q->cluster_code));
+        $imksResult = null;
+
+        if ($isImks) {
+            $imksResult = ImksCalculator::calculateIMKSScore($request->answers, $questions);
+            $scores = $imksResult['category_scores'];
+            $matchingScores = $imksResult['exact_category_scores'];
+        } else {
+            $scores = $legacyScores;
+            $matchingScores = $legacyScores;
         }
+
+        // Determine ranked Holland traits & dominant trait (exact IMKS average tie-breaker, then R -> I -> A -> S -> E -> C)
+        $rankedTraits = RiasecMatcher::rankTraits($matchingScores);
+        $dominantTrait = $rankedTraits[0];
 
         // Calculate User SPM Merit Score & snapshot
         $spmRecords = SpmResult::where('user_id', $userId)->get();
@@ -148,47 +157,12 @@ class RiasecController extends Controller
             'grade' => $r->grade,
         ])->toArray();
 
-        // Rule-based Recommendation Matching:
-        // Match recommendation rules where riasec_type == dominantTrait
-        $rules = RecommendationRule::with('programme')
-            ->where('riasec_type', $dominantTrait)
+        // Multi-Trait RIASEC Matching (Top 2 / Top 3 Student Traits vs Programme 2-3 RIASEC Rules)
+        $allProgrammes = Programme::with(['rules' => fn ($q) => $q->orderBy('id')])
+            ->whereHas('rules')
             ->get();
 
-        // Filter matched programmes by checking min_grade against user's best/average grades
-        $matchedProgrammes = [];
-        foreach ($rules as $rule) {
-            if ($rule->programme) {
-                // Check if user's SPM results have any subject meeting or exceeding rule's min_grade
-                // And merit score is reasonable
-                $meetsCriteria = false;
-                foreach ($spmSnapshot as $spmItem) {
-                    if (MeritCalculator::meetsMinGrade($spmItem['grade'], $rule->min_grade)) {
-                        $meetsCriteria = true;
-                        break;
-                    }
-                }
-
-                if ($meetsCriteria) {
-                    $matchedProgrammes[] = $rule->programme;
-                }
-            }
-        }
-
-        // Fallback: If no direct rule matches with strict min_grade, retrieve default IPTA programmes for that RIASEC domain
-        if (empty($matchedProgrammes)) {
-            $fallbackRules = RecommendationRule::with('programme')
-                ->where('riasec_type', $dominantTrait)
-                ->take(5)
-                ->get();
-            foreach ($fallbackRules as $r) {
-                if ($r->programme) {
-                    $matchedProgrammes[] = $r->programme;
-                }
-            }
-        }
-
-        // Deduplicate programmes by ID
-        $uniqueProgrammes = collect($matchedProgrammes)->unique('id')->values();
+        $uniqueProgrammes = RiasecMatcher::matchProgrammes($allProgrammes, $matchingScores, $spmSnapshot);
 
         // Create Recommendation session snapshot
         $sessionId = (string) Str::uuid();
@@ -202,19 +176,20 @@ class RiasecController extends Controller
                     'merit_score' => $meritScore,
                     'dominant_trait' => $dominantTrait,
                     'riasec_scores' => $scores,
+                    'imks_result' => $imksResult,
                     'spm_snapshot' => $spmSnapshot,
                     'date_generated' => now(),
                 ]);
             }
-        } else {
-            // Even if none matched, record snapshot with null programme
+        } elseif ($fallbackProgId = Programme::query()->value('id')) {
             Recommendation::create([
                 'user_id' => $userId,
-                'programme_id' => 1,
+                'programme_id' => $fallbackProgId,
                 'session_id' => $sessionId,
                 'merit_score' => $meritScore,
                 'dominant_trait' => $dominantTrait,
                 'riasec_scores' => $scores,
+                'imks_result' => $imksResult,
                 'spm_snapshot' => $spmSnapshot,
                 'date_generated' => now(),
             ]);
@@ -230,9 +205,10 @@ class RiasecController extends Controller
     {
         $userId = $request->user()->id;
 
-        $recs = Recommendation::with('programme')
+        $recs = Recommendation::with(['programme.rules' => fn ($q) => $q->orderBy('id')])
             ->where('user_id', $userId)
             ->where('session_id', $sessionId)
+            ->orderBy('id')
             ->get();
 
         if ($recs->isEmpty()) {
@@ -242,18 +218,30 @@ class RiasecController extends Controller
         $first = $recs->first();
         $dominant = $first->dominant_trait;
         $scores = $first->riasec_scores ?? [];
+        $imksResult = $first->imks_result ?? null;
         $meritScore = $first->merit_score ?? 0;
-        $programmes = $recs->pluck('programme')->filter()->values();
+
+        $rankingScores = $imksResult['exact_category_scores'] ?? $scores;
+        $topTraits = RiasecMatcher::getTopTraitSummaries($rankingScores, 3, $scores);
+        $topTraitNames = array_column($topTraits, 'trait');
+
+        $programmes = $recs->pluck('programme')
+            ->filter()
+            ->unique('id')
+            ->map(fn (Programme $prog) => RiasecMatcher::enrichProgramme($prog, $topTraitNames))
+            ->values();
 
         return Inertia::render('Riasec/Result', [
             'sessionId' => $sessionId,
             'dominantTrait' => $dominant,
+            'topTraits' => $topTraits,
             'traitInfo' => self::TRAIT_DESCRIPTIONS[$dominant] ?? [
                 'name' => strtoupper($dominant),
-                'tagline' => 'Personality Profile',
-                'description' => 'Matched with higher education programmes.',
+                'tagline' => 'Profil Personaliti',
+                'description' => 'Dipadankan dengan program pengajian tinggi yang bersesuaian.',
             ],
             'riasecScores' => $scores,
+            'imksResult' => $imksResult,
             'meritScore' => $meritScore,
             'programmes' => $programmes,
         ]);
@@ -264,7 +252,9 @@ class RiasecController extends Controller
      */
     public function programmeDetails(int $id): Response
     {
-        $programme = Programme::findOrFail($id);
+        $programme = RiasecMatcher::enrichProgramme(
+            Programme::with(['rules' => fn ($q) => $q->orderBy('id')])->findOrFail($id)
+        );
 
         return Inertia::render('Riasec/ProgrammeDetail', [
             'programme' => $programme,

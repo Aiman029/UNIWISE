@@ -63,7 +63,7 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return redirect()->back()->with('success', 'USER INFO UPDATE SUCCESSFULLY');
+        return redirect()->back()->with('success', 'MAKLUMAT PENGGUNA BERJAYA DIKEMASKINI');
     }
 
     /**
@@ -74,7 +74,7 @@ class UserController extends Controller
         // Prevent admin from deactivating their own active account
         if ($user->id === auth()->id()) {
             return redirect()->back()->withErrors([
-                'error' => 'You cannot deactivate your own administrative account.',
+                'error' => 'Anda tidak boleh menyahaktifkan akaun pentadbir anda sendiri.',
             ]);
         }
 
@@ -82,8 +82,8 @@ class UserController extends Controller
         $user->update(['status' => $newStatus]);
 
         $msg = $newStatus === 'deactivated' 
-            ? 'ACCOUNT DEACTIVATE SUCCESSFULLY' 
-            : 'ACCOUNT ACTIVATED SUCCESSFULLY';
+            ? 'AKAUN BERJAYA DINYAHAKTIFKAN' 
+            : 'AKAUN BERJAYA DIAKTIFKAN';
 
         return redirect()->back()->with('success', $msg);
     }

@@ -98,28 +98,19 @@ export default function Dashboard({
             <Head title="Papan Pemuka Analitik Pentadbir - UniWise" />
 
             <div className="space-y-8">
-                {/* Header with System Health and Live Metrics */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <span className="p-1.5 rounded-lg bg-sky-100 text-sky-700">
-                                <Activity className="w-5 h-5" />
-                            </span>
-                            <h1 className="text-2xl font-black text-slate-800 tracking-tight">
-                                Papan Pemuka & Analitik Pentadbir
-                            </h1>
-                        </div>
-                        <p className="text-sm text-slate-500 mt-1">
-                            Cerapan analitik masa nyata penilaian RIASEC, taburan skor merit SPM, dan statistik pemadanan program IPTA.
-                        </p>
-                    </div>
-
+                {/* Header */}
+                <div className="pb-2 border-b border-slate-200">
                     <div className="flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                            Sistem Beroperasi 100%
+                        <span className="p-1.5 rounded-lg bg-sky-100 text-sky-700">
+                            <Activity className="w-5 h-5" />
                         </span>
+                        <h1 className="text-2xl font-black text-slate-800 tracking-tight">
+                            Papan Pemuka & Analitik Pentadbir
+                        </h1>
                     </div>
+                    <p className="text-sm text-slate-500 mt-1">
+                        Cerapan analitik masa nyata penilaian RIASEC, taburan skor merit SPM, dan statistik pemadanan program IPTA.
+                    </p>
                 </div>
 
                 {/* 4 Core Stat Cards (SRS Figure 3.2.1.1.6) */}
@@ -537,11 +528,11 @@ export default function Dashboard({
                                 <div className="flex items-center gap-2">
                                     <Clock className="w-5 h-5 text-sky-200" />
                                     <h2 className="text-base font-extrabold uppercase tracking-wide">
-                                        System Activity Feed
+                                        Log Aktiviti Sistem
                                     </h2>
                                 </div>
                                 <span className="text-xs font-semibold bg-sky-700/80 px-2.5 py-1 rounded-md text-sky-100">
-                                    Live Logs
+                                    Rekod Langsung
                                 </span>
                             </div>
 
@@ -587,7 +578,7 @@ export default function Dashboard({
                                 <div className="flex items-center gap-2">
                                     <TrendingUp className="w-5 h-5 text-amber-300" />
                                     <h2 className="text-base font-extrabold uppercase tracking-wide">
-                                        Programme Type matched by Merit
+                                        Jenis Program Dipadankan Mengikut Merit
                                     </h2>
                                 </div>
                                 <div className="flex items-center gap-3 text-[11px] font-bold">

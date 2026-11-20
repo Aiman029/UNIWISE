@@ -28,7 +28,7 @@ class AcademicResultTest extends TestCase
         // Before submitting SPM, accessing riasec should redirect to dashboard
         $preCheck = $this->actingAs($user)->get('/riasec');
         $preCheck->assertRedirect(route('dashboard'));
-        $preCheck->assertSessionHas('error', 'Please complete Academic Results first');
+        $preCheck->assertSessionHas('error', 'Sila lengkapkan Keputusan Akademik SPM terlebih dahulu.');
 
         // Submit SPM academic results
         $payload = [
@@ -45,7 +45,7 @@ class AcademicResultTest extends TestCase
 
         $submitResponse = $this->actingAs($user)->post('/spm-results', $payload);
         $submitResponse->assertRedirect(route('dashboard'));
-        $submitResponse->assertSessionHas('success', 'ACADEMIC RESULT SUCCESSFULLY ADDED');
+        $submitResponse->assertSessionHas('success', 'KEPUTUSAN AKADEMIK BERJAYA DISIMPAN');
 
         // Verify rows exist in database
         $this->assertEquals(6, SpmResult::where('user_id', $user->id)->count());

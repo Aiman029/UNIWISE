@@ -100,20 +100,20 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
 
     return (
         <AdminLayout activePage="riasec-questions">
-            <Head title="RIASEC Question Management - UniWise Admin" />
+            <Head title="Pengurusan Soalan RIASEC - Pentadbir UniWise" />
 
             <div className="max-w-7xl mx-auto space-y-6">
-                {/* Header matching Figure 3.2.1.8.2 */}
+                {/* Header */}
                 <div className="bg-gradient-to-r from-sky-600 to-indigo-700 rounded-3xl p-6 md:p-8 text-white shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                         <span className="text-xs font-bold uppercase tracking-widest text-sky-200">
                             PENGURUSAN INVENTORI PERSONALITI
                         </span>
                         <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mt-1">
-                            RIASEC QUESTION MANAGEMENT
+                            PENGURUSAN SOALAN RIASEC
                         </h1>
                         <p className="text-xs text-sky-100 mt-1">
-                            Urus bank soalan teori Holland RIASEC untuk penilaian personaliti pelajar.
+                            Urus bank soalan teori Holland RIASEC &amp; IMKS 2013 untuk penilaian personaliti pelajar.
                         </p>
                     </div>
 
@@ -124,7 +124,7 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
                             className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-md transition"
                         >
                             <Plus className="w-4 h-4" />
-                            <span>+ ADD NEW QUESTION</span>
+                            <span>TAMBAH SOALAN BAHARU</span>
                         </button>
                     </div>
                 </div>
@@ -169,10 +169,10 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
                             <thead>
                                 <tr className="bg-sky-600 text-white font-extrabold uppercase tracking-wider text-[11px]">
                                     <th className="py-3.5 px-4 text-center w-12">#</th>
-                                    <th className="py-3.5 px-5">QUESTION TEXT</th>
-                                    <th className="py-3.5 px-4 text-center">CATEGORY</th>
-                                    <th className="py-3.5 px-4 text-center">DATE ADDED</th>
-                                    <th className="py-3.5 px-5 text-right">ACTION</th>
+                                    <th className="py-3.5 px-5">TEKS SOALAN</th>
+                                    <th className="py-3.5 px-4 text-center">KATEGORI</th>
+                                    <th className="py-3.5 px-4 text-center">TARIKH DITAMBAH</th>
+                                    <th className="py-3.5 px-5 text-right">TINDAKAN</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100 font-medium">
@@ -272,7 +272,7 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
                             </div>
                             <div>
                                 <h3 className="text-base font-black uppercase text-slate-900">
-                                    ADD NEW RIASEC QUESTION
+                                    TAMBAH SOALAN RIASEC BAHARU
                                 </h3>
                                 <p className="text-xs text-slate-500">
                                     Tambah item soalan baharu ke dalam penilaian personaliti
@@ -282,7 +282,7 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
 
                         <form onSubmit={submitAdd} className="space-y-4 text-xs font-semibold">
                             <div>
-                                <label className="block text-slate-700 mb-1">Teks Soalan (Question Text)</label>
+                                <label className="block text-slate-700 mb-1">Teks Soalan</label>
                                 <textarea
                                     required
                                     rows="3"
@@ -294,18 +294,18 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
                             </div>
 
                             <div>
-                                <label className="block text-slate-700 mb-1">Kategori RIASEC (Category)</label>
+                                <label className="block text-slate-700 mb-1">Kategori RIASEC</label>
                                 <select
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 font-bold"
                                 >
-                                    <option value="Realistic">Realistic (R) - Praktikal & Teknikal</option>
-                                    <option value="Investigative">Investigative (I) - Analitikal & Saintifik</option>
-                                    <option value="Artistic">Artistic (A) - Kreatif & Inovatif</option>
-                                    <option value="Social">Social (S) - Komunikasi & Tolong Menolong</option>
-                                    <option value="Enterprising">Enterprising (E) - Kepimpinan & Perniagaan</option>
-                                    <option value="Conventional">Conventional (C) - Sistematik & Pengurusan Rekod</option>
+                                    <option value="Realistic">Realistik (R) - Praktikal &amp; Teknikal</option>
+                                    <option value="Investigative">Investigatif (I) - Analitikal &amp; Saintifik</option>
+                                    <option value="Artistic">Artistik (A) - Kreatif &amp; Inovatif</option>
+                                    <option value="Social">Sosial (S) - Komunikasi &amp; Tolong Menolong</option>
+                                    <option value="Enterprising">Enterprising (E) - Kepimpinan &amp; Perniagaan</option>
+                                    <option value="Conventional">Konvensional (C) - Sistematik &amp; Pengurusan Rekod</option>
                                 </select>
                             </div>
 
@@ -321,7 +321,7 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
                                     type="submit"
                                     className="w-1/2 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-md transition uppercase tracking-wider"
                                 >
-                                    ADD QUESTION
+                                    TAMBAH SOALAN
                                 </button>
                             </div>
                         </form>
@@ -329,7 +329,7 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
                 </div>
             )}
 
-            {/* Edit Question Modal matching Figure 3.2.1.8.4 */}
+            {/* Edit Question Modal */}
             {isEditModalOpen && selectedQuestion && (
                 <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
                     <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 animate-scale-in border border-slate-200 relative">
@@ -347,7 +347,7 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
                             </div>
                             <div>
                                 <h3 className="text-base font-black uppercase text-slate-900">
-                                    EDIT RIASEC QUESTION
+                                    SUNTING SOALAN RIASEC
                                 </h3>
                                 <p className="text-xs text-slate-500">
                                     Kemaskini pernyataan soalan atau kategori
@@ -357,7 +357,7 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
 
                         <form onSubmit={submitEdit} className="space-y-4 text-xs font-semibold">
                             <div>
-                                <label className="block text-slate-700 mb-1">Teks Soalan (Question Text)</label>
+                                <label className="block text-slate-700 mb-1">Teks Soalan</label>
                                 <textarea
                                     required
                                     rows="3"
@@ -368,18 +368,18 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
                             </div>
 
                             <div>
-                                <label className="block text-slate-700 mb-1">Kategori RIASEC (Category)</label>
+                                <label className="block text-slate-700 mb-1">Kategori RIASEC</label>
                                 <select
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 font-bold"
                                 >
-                                    <option value="Realistic">Realistic (R)</option>
-                                    <option value="Investigative">Investigative (I)</option>
-                                    <option value="Artistic">Artistic (A)</option>
-                                    <option value="Social">Social (S)</option>
+                                    <option value="Realistic">Realistik (R)</option>
+                                    <option value="Investigative">Investigatif (I)</option>
+                                    <option value="Artistic">Artistik (A)</option>
+                                    <option value="Social">Sosial (S)</option>
                                     <option value="Enterprising">Enterprising (E)</option>
-                                    <option value="Conventional">Conventional (C)</option>
+                                    <option value="Conventional">Konvensional (C)</option>
                                 </select>
                             </div>
 
@@ -395,7 +395,7 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
                                     type="submit"
                                     className="w-1/2 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-md transition uppercase tracking-wider"
                                 >
-                                    UPDATE QUESTION
+                                    KEMAS KINI SOALAN
                                 </button>
                             </div>
                         </form>
@@ -403,7 +403,7 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
                 </div>
             )}
 
-            {/* Delete Confirmation Modal matching Figure 3.2.1.8.6 */}
+            {/* Delete Confirmation Modal */}
             {isDeleteModalOpen && selectedQuestion && (
                 <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
                     <div className="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 text-center animate-scale-in border border-slate-200">
@@ -412,7 +412,7 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
                         </div>
 
                         <h3 className="text-base font-black text-slate-900 uppercase">
-                            ARE YOU SURE WANT TO DELETE THIS QUESTION?
+                            ADAKAH ANDA PASTI MAHU MEMADAM SOALAN INI?
                         </h3>
                         <p className="text-xs font-semibold text-slate-700 mt-2 px-2 italic">
                             "{selectedQuestion.question_text}"
@@ -427,14 +427,14 @@ export default function RiasecQuestionIndex({ questions, categories = [], filter
                                 onClick={() => setIsDeleteModalOpen(false)}
                                 className="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition uppercase"
                             >
-                                CANCEL
+                                BATAL
                             </button>
                             <button
                                 type="button"
                                 onClick={confirmDelete}
                                 className="w-1/2 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition uppercase"
                             >
-                                DELETE
+                                PADAM
                             </button>
                         </div>
                     </div>

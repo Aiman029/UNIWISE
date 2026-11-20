@@ -33,7 +33,7 @@ export default function Show({ user }) {
                     <div className="w-full max-w-md space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-100">
                         <div>
                             <span className="block text-xs font-bold uppercase tracking-wider text-slate-400">
-                                NAMA (NAME)
+                                NAMA PENUH
                             </span>
                             <span className="text-base font-semibold text-slate-800">
                                 {user.name}
@@ -42,7 +42,7 @@ export default function Show({ user }) {
 
                         <div className="pt-3 border-t border-slate-200/60">
                             <span className="block text-xs font-bold uppercase tracking-wider text-slate-400">
-                                EMEL (EMAIL)
+                                ALAMAT EMEL
                             </span>
                             <span className="text-base font-semibold text-slate-800">
                                 {user.email}
@@ -56,7 +56,7 @@ export default function Show({ user }) {
                                 </span>
                                 <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-100/60 px-2.5 py-0.5 rounded-full mt-1">
                                     <ShieldCheck className="w-3.5 h-3.5" />
-                                    {user.status ? user.status.toUpperCase() : 'ACTIVE'}
+                                    {user.status === 'deactivated' ? 'TIDAK AKTIF' : 'AKTIF'}
                                 </span>
                             </div>
                             <div className="text-right">
@@ -64,7 +64,7 @@ export default function Show({ user }) {
                                     PERANAN
                                 </span>
                                 <span className="text-xs font-semibold text-slate-700 mt-1 inline-block">
-                                    {user.role === 'admin' ? 'Pentadbir (Admin)' : 'Pelajar SPM'}
+                                    {user.role === 'admin' ? 'Pentadbir' : 'Pelajar SPM'}
                                 </span>
                             </div>
                         </div>
@@ -76,7 +76,7 @@ export default function Show({ user }) {
                             className="inline-flex items-center gap-2 px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-sm rounded-xl shadow transition"
                         >
                             <Edit3 className="w-4 h-4" />
-                            <span>EDIT PROFILE</span>
+                            <span>KEMAS KINI PROFIL</span>
                         </Link>
                     </div>
                 </div>

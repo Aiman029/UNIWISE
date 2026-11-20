@@ -16,7 +16,6 @@ import {
     Info,
     ArrowRight,
     TrendingUp,
-    ShieldCheck,
     Check,
 } from 'lucide-react';
 import { DataUploadOverlay } from '@/Components/Skeleton';
@@ -312,15 +311,6 @@ export default function Index({
                                 UPU rasmi (90% akademik daripada 8 subjek terbaik) secara masa nyata.
                             </p>
                         </div>
-
-                        {/* Quick Status Pill */}
-                        <div className="hidden lg:flex items-center gap-3 bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200/80 shrink-0">
-                            <ShieldCheck className="w-5 h-5 text-blue-600" />
-                            <div className="text-xs">
-                                <span className="block font-bold text-slate-800">Formula Rasmi KPM</span>
-                                <span className="text-[11px] text-slate-500">Skala 18 mata per subjek</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -580,7 +570,7 @@ export default function Index({
                             {/* Header Badge */}
                             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold mb-4">
                                 <TrendingUp className="w-3.5 h-3.5 text-blue-600" />
-                                <span>Live UPU Merit Meter</span>
+                                <span>Meter Merit UPU Langsung</span>
                             </div>
 
                             {/* SVG Radial Meter */}
@@ -662,7 +652,7 @@ export default function Index({
                                                 <div className="flex items-center gap-1.5 shrink-0">
                                                     <span className="font-extrabold text-slate-900">{sub.grade}</span>
                                                     <span className="text-[10px] text-slate-400 font-medium">
-                                                        ({sub.points} pts)
+                                                        ({sub.points} mata)
                                                     </span>
                                                 </div>
                                             </div>

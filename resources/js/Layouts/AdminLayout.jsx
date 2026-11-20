@@ -40,11 +40,11 @@ export default function AdminLayout({ children, activePage = 'dashboard' }) {
     }, []);
 
     const navItems = [
-        { id: 'dashboard', label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-        { id: 'users', label: 'User Accounts', href: '/admin/users', icon: Users },
-        { id: 'programmes', label: 'Programme Info', href: '/admin/programmes', icon: BookOpen },
-        { id: 'riasec-questions', label: 'RIASEC Question', href: '/admin/riasec-questions', icon: HelpCircle },
-        { id: 'recommendation-rules', label: 'Recommendation Rules', href: '/admin/recommendation-rules', icon: Sliders },
+        { id: 'dashboard', label: 'Papan Pemuka', href: '/admin/dashboard', icon: LayoutDashboard },
+        { id: 'users', label: 'Akaun Pengguna', href: '/admin/users', icon: Users },
+        { id: 'programmes', label: 'Maklumat Program', href: '/admin/programmes', icon: BookOpen },
+        { id: 'riasec-questions', label: 'Soalan RIASEC', href: '/admin/riasec-questions', icon: HelpCircle },
+        { id: 'recommendation-rules', label: 'Peraturan Padanan', href: '/admin/recommendation-rules', icon: Sliders },
     ];
 
     const handleLogout = () => {
@@ -61,24 +61,23 @@ export default function AdminLayout({ children, activePage = 'dashboard' }) {
             )}
             {/* Top Navbar matching Figure 3.2.1.1.6 */}
             <header className="bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 text-white shadow-sm px-6 py-3 flex justify-between items-center sticky top-0 z-30">
-                <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-indigo-950 text-white flex items-center justify-center font-black text-sm shadow">
-                        UW
+                <Link href="/admin/dashboard" className="flex items-center gap-3 group">
+                    <div className="bg-white/95 rounded-xl px-2.5 py-1 shadow-xs flex items-center group-hover:scale-105 transition-transform">
+                        <img
+                            src="/images/uniwise-logo.png"
+                            alt="UniWise Logo"
+                            className="h-7 sm:h-8 w-auto object-contain"
+                        />
                     </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-xl font-extrabold tracking-wide text-indigo-950">
-                            UniWise
-                        </span>
-                        <span className="text-[10px] font-black uppercase tracking-wider bg-indigo-950/80 text-amber-300 px-2 py-0.5 rounded">
-                            Admin
-                        </span>
-                    </div>
-                </div>
+                    <span className="text-[10px] font-black uppercase tracking-wider bg-indigo-950 text-amber-300 px-2 py-0.5 rounded shadow-xs">
+                        Pentadbir
+                    </span>
+                </Link>
 
                 <div className="flex items-center gap-3">
                     <div className="flex items-center gap-2 bg-amber-600/60 backdrop-blur-sm px-3.5 py-1.5 rounded-full border border-amber-400/40 text-xs font-bold text-white shadow-sm">
                         <Shield className="w-3.5 h-3.5 text-amber-200" />
-                        <span>{user?.name || 'Admin 1'}</span>
+                        <span>{user?.name || 'Pentadbir 1'}</span>
                     </div>
 
                     <button
@@ -143,15 +142,11 @@ export default function AdminLayout({ children, activePage = 'dashboard' }) {
                         </nav>
                     </div>
 
-                    {/* Logout in Sidebar Footer */}
-                    <div className="p-4 border-t border-sky-500/40">
-                        <button
-                            onClick={handleLogout}
-                            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-sky-100 hover:bg-rose-600 hover:text-white transition-colors"
-                        >
-                            <LogOut className="w-5 h-5 flex-shrink-0" />
-                            <span>LogOut</span>
-                        </button>
+                    {/* Sidebar Footer Info */}
+                    <div className="p-4 border-t border-sky-500/40 text-center">
+                        <span className="text-[11px] text-sky-200/80 font-medium">
+                            Panel Pentadbir UniWise
+                        </span>
                     </div>
                 </aside>
 
@@ -165,7 +160,7 @@ export default function AdminLayout({ children, activePage = 'dashboard' }) {
                                     <span>Memuatkan data pentadbir... Sila tunggu sebentar.</span>
                                 </div>
                                 <span className="text-[10px] uppercase font-black text-sky-600 bg-white px-2 py-0.5 rounded border border-sky-200">
-                                    Admin Sync
+                                    Segerak Pentadbir
                                 </span>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

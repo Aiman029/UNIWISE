@@ -46,16 +46,15 @@ export default function Index() {
 
                     <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider text-indigo-800 bg-indigo-50 mb-4 border border-indigo-200 shadow-sm">
                         <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-                        <span>Teori Personaliti Holland &bull; RIASEC Inventory</span>
+                        <span>Inventori Minat Kerjaya Sidek (IMKS 2013) &bull; RIASEC</span>
                     </div>
 
                     <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-4">
-                        What Should You Study: Personality Quiz
+                        Ujian Personaliti &amp; Minat Kerjaya IMKS
                     </h1>
 
                     <p className="text-sm md:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed mb-8">
-                        Adakah anda pasti program pengajian yang anda pilih sepadan dengan minat dan personaliti sebenar anda?
-                        Berdasarkan model saintifik Kod Holland, kuiz ini akan mengenal pasti corak personaliti anda dan memadankan program IPTA terbaik untuk masa depan anda.
+                        Berdasarkan instrumen rasmi <strong>Inventori Minat Kerjaya Sidek (IMKS 2013)</strong> merangkumi 17 kluster kerjaya dan Teori Holland, sistem akan mengenal pasti Kod Tiga-Mata Holland anda serta memadankan program IPTA terbaik.
                     </p>
 
                     {/* Features Strip */}
@@ -65,8 +64,8 @@ export default function Index() {
                                 <CheckCircle className="w-4 h-4" />
                             </div>
                             <div>
-                                <span className="font-extrabold text-slate-900 block text-xs">30 Soalan Mudah</span>
-                                <span className="text-[11px] text-slate-500">Pilihan 'Ya' / 'Tidak' secara spontan</span>
+                                <span className="font-extrabold text-slate-900 block text-xs">170 Item IMKS 2013</span>
+                                <span className="text-[11px] text-slate-500">Bahagian A &amp; B (Pilihan Y / T)</span>
                             </div>
                         </div>
 
@@ -76,7 +75,7 @@ export default function Index() {
                             </div>
                             <div>
                                 <span className="font-extrabold text-slate-900 block text-xs">Masa Diperlukan</span>
-                                <span className="text-[11px] text-slate-500">Kira-kira 5 minit sahaja</span>
+                                <span className="text-[11px] text-slate-500">Kira-kira 10–15 minit sahaja</span>
                             </div>
                         </div>
 
@@ -123,7 +122,7 @@ export default function Index() {
                             href="/riasec/quiz"
                             className="inline-flex items-center gap-3 px-12 py-4 bg-sky-600 hover:bg-sky-700 text-white font-black text-base rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 active:scale-95"
                         >
-                            <span>TAKE QUIZ NOW</span>
+                            <span>MULA UJIAN SEKARANG</span>
                             <ArrowRight className="w-5 h-5" />
                         </Link>
                     </div>

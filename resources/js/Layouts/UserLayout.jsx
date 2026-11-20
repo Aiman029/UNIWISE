@@ -68,7 +68,7 @@ export default function UserLayout({ children, activePage = 'dashboard' }) {
     }, []);
 
     const navItems = [
-        { id: 'dashboard', label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+        { id: 'dashboard', label: 'Papan Pemuka', href: '/dashboard', icon: LayoutDashboard },
         { id: 'academic', label: 'Keputusan SPM & Merit', href: '/spm-results', icon: GraduationCap },
         { id: 'riasec', label: 'Ujian Minat RIASEC', href: '/riasec', icon: Compass },
         { id: 'directory', label: 'Direktori IPTA', href: '/directory', icon: School },
@@ -126,19 +126,13 @@ export default function UserLayout({ children, activePage = 'dashboard' }) {
                         {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                     </button>
 
-                    {/* UniWise Brand Logo with Vibrant Electric Gradient */}
+                    {/* UniWise Brand Logo */}
                     <Link href="/" className="flex items-center gap-2.5 group">
-                        <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-blue-600 to-indigo-600 text-white flex items-center justify-center font-display font-extrabold text-sm shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform duration-200">
-                            UW
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="font-display text-xl font-extrabold tracking-tight text-slate-900 leading-none">
-                                UniWise<span className="text-blue-600">.</span>
-                            </span>
-                            <span className="text-[9px] font-extrabold text-blue-600 tracking-wider uppercase mt-0.5">
-                                Panduan Halatuju SPM
-                            </span>
-                        </div>
+                        <img
+                            src="/images/uniwise-logo.png"
+                            alt="UniWise Logo"
+                            className="h-9 sm:h-10 w-auto object-contain group-hover:scale-105 transition-transform duration-200"
+                        />
                     </Link>
                 </div>
 
@@ -356,13 +350,18 @@ export default function UserLayout({ children, activePage = 'dashboard' }) {
                     </div>
 
                     {/* Sidebar Footer Info */}
-                    <div className="p-4 border-t border-slate-900 bg-slate-950/90 text-center">
+                    <div className="p-4 border-t border-slate-900 bg-slate-950/90 text-center flex flex-col items-center">
+                        <img
+                            src="/images/uniwise-icon.png"
+                            alt="UniWise"
+                            className="w-7 h-7 object-contain mb-1.5 opacity-90 brightness-110"
+                        />
                         <div className="inline-flex items-center gap-1.5 text-[11px] text-blue-400 font-extrabold tracking-tight">
                             <Sparkles className="w-3 h-3 text-amber-400" />
                             <span>UniWise Pro &bull; Bimbingan SPM</span>
                         </div>
                         <div className="text-[10px] text-slate-500 mt-0.5">
-                            UPU & RIASEC Holland Engine
+                            Enjin Padanan UPU &amp; RIASEC Holland
                         </div>
                     </div>
                 </aside>
@@ -377,7 +376,7 @@ export default function UserLayout({ children, activePage = 'dashboard' }) {
                                     <span>Sedang memuat naik data... Sila tunggu sebentar.</span>
                                 </div>
                                 <span className="text-[10px] uppercase font-black text-blue-700 bg-white px-2.5 py-0.5 rounded-lg border border-blue-200 shadow-2xs shrink-0">
-                                    UniWise Sync
+                                    Segerak UniWise
                                 </span>
                             </div>
                             <PageSkeleton page={activePage} />

@@ -178,3 +178,22 @@ body {
     transform-origin: 0% 50%;
 }
 
+/* Background subtle tech grid */
+.bg-grid-pattern {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+}
+
+@keyframes sweepGlow {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(250%);
+    }
+}
+
+.animate-sweep {
+    animation: sweepGlow 2.5s infinite ease-in-out;
+}
+

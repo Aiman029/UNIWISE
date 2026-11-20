@@ -24,16 +24,24 @@ class RecommendationRuleSeeder extends Seeder
                     })
                     ->first();
 
-                if ($prog && !empty($item['riasec_type'])) {
-                    RecommendationRule::updateOrCreate(
-                        [
-                            'programme_id' => $prog->id,
-                            'riasec_type' => $item['riasec_type'],
-                        ],
-                        [
-                            'min_grade' => $item['min_grade'] ?? 'C',
-                        ]
-                    );
+                if ($prog) {
+                    $riasecTypes = $item['riasec_types'] ?? array_values(array_unique(array_filter(array_merge(
+                        !empty($item['riasec_type']) ? [$item['riasec_type']] : [],
+                        $item['sub_riasec_type'] ?? []
+                    ))));
+
+                    if (!empty($riasecTypes)) {
+                        // Replace all rules for this programme cleanly so id ordering always keeps Primary -> Sub 1 -> Sub 2
+                        RecommendationRule::where('programme_id', $prog->id)->delete();
+
+                        foreach ($riasecTypes as $type) {
+                            RecommendationRule::create([
+                                'programme_id' => $prog->id,
+                                'riasec_type' => $type,
+                                'min_grade' => $item['min_grade'] ?? 'C',
+                            ]);
+                        }
+                    }
                 }
             }
         }

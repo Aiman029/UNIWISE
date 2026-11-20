@@ -1,6 +1,7 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
 import UserLayout from '@/Layouts/UserLayout';
+import RiasecBadges from '@/Components/RiasecBadges';
 import { School, FileText, ArrowLeft, Award, CheckCircle2 } from 'lucide-react';
 
 export default function ProgrammeDetail({ programme }) {
@@ -44,13 +45,16 @@ export default function ProgrammeDetail({ programme }) {
                                     </span>
                                 )}
                             </div>
+                            <div className="mt-3">
+                                <RiasecBadges programme={programme} dark />
+                            </div>
                         </div>
                     </div>
 
                     <div className="bg-sky-700/60 rounded-2xl p-6 border border-sky-400/40 space-y-4">
                         <div className="flex items-center gap-2 text-amber-300 font-extrabold text-sm tracking-wider uppercase">
                             <FileText className="w-4 h-4" />
-                            <span>SYARAT KEMASUKAN (ENTRY REQUIREMENTS)</span>
+                            <span>SYARAT KEMASUKAN (SPM)</span>
                         </div>
 
                         <div className="text-sm text-sky-50 leading-relaxed font-medium whitespace-pre-line bg-sky-800/50 p-5 rounded-xl border border-sky-500/40">

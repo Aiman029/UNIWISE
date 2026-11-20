@@ -2,7 +2,10 @@ import React, { useState, useRef, useMemo } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import UserLayout from '@/Layouts/UserLayout';
 import RiasecRadarChart from '@/Components/RiasecRadarChart';
+import RiasecBadges from '@/Components/RiasecBadges';
+import ImksBreakdownCard from '@/Components/ImksBreakdownCard';
 import { calculateAdmissionChance } from '@/Utils/admissionChance';
+import { RIASEC_META, computeTopTraitsFromScores, formatHollandCode } from '@/Utils/riasec';
 import {
     ArrowLeft,
     Calendar,
@@ -16,6 +19,7 @@ import {
     SlidersHorizontal,
     Sparkles,
     TrendingUp,
+    Compass,
 } from 'lucide-react';
 
 export default function Show({
@@ -23,13 +27,28 @@ export default function Show({
     dateGenerated,
     meritScore = 0,
     dominantTrait,
+    topTraits = [],
     traitInfo = {},
     riasecScores = {},
+    imksResult = null,
     spmResults = [],
     programmes = [],
 }) {
+    const scoreMax = imksResult ? 10 : 5;
     const [selectedProgramme, setSelectedProgramme] = useState(null);
     const programmeSectionRef = useRef(null);
+
+    const resolvedTopTraits = useMemo(() => {
+        if (Array.isArray(topTraits) && topTraits.length > 0) {
+            return topTraits;
+        }
+        return computeTopTraitsFromScores(riasecScores, 3);
+    }, [topTraits, riasecScores]);
+
+    const hollandCode = useMemo(
+        () => formatHollandCode(resolvedTopTraits.map((t) => t.trait)),
+        [resolvedTopTraits]
+    );
 
     // Search and Filter states
     const [searchQuery, setSearchQuery] = useState('');
@@ -140,7 +159,7 @@ export default function Show({
                     <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
                         <div className="bg-sky-600 px-6 py-4 text-white">
                             <h2 className="text-sm font-extrabold uppercase tracking-wider">
-                                SPM Result Summary
+                                Ringkasan Keputusan SPM
                             </h2>
                         </div>
 
@@ -149,8 +168,8 @@ export default function Show({
                                 <table className="w-full text-xs text-left">
                                     <thead>
                                         <tr className="border-b border-slate-200 text-slate-400 font-extrabold uppercase">
-                                            <th className="py-2">SUBJECT</th>
-                                            <th className="py-2 text-right">GRADE</th>
+                                            <th className="py-2">MATA PELAJARAN</th>
+                                            <th className="py-2 text-right">GRED</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
@@ -178,7 +197,7 @@ export default function Show({
 
                             <div className="mt-4 pt-4 border-t border-slate-200 flex justify-between items-center text-xs">
                                 <span className="font-bold text-slate-500 uppercase">
-                                    Calculated Merit Score:
+                                    Skor Merit Dikira:
                                 </span>
                                 <span className="text-base font-black text-sky-700 bg-sky-50 px-3 py-1 rounded-xl border border-sky-200">
                                     {meritScore}%
@@ -187,33 +206,64 @@ export default function Show({
                         </div>
                     </div>
 
-                    {/* Right Column: RIASEC Traits Graph matching Figure 3.2.1.5.4 */}
+                    {/* Right Column: RIASEC Traits Graph */}
                     <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
                         <div className="bg-sky-600 px-6 py-4 text-white">
                             <h2 className="text-sm font-extrabold uppercase tracking-wider">
-                                RIASEC Traits Graph
+                                Graf Dimensi RIASEC
                             </h2>
                         </div>
 
                         <div className="p-6 flex-1 flex flex-col items-center justify-between space-y-4">
                             <div className="w-full flex items-center justify-center p-2 bg-slate-50 rounded-xl border border-slate-100">
-                                <RiasecRadarChart scores={riasecScores} size={240} />
+                                <RiasecRadarChart scores={riasecScores} size={240} maxVal={scoreMax} />
                             </div>
 
-                            <div className="text-center w-full">
-                                <span className="text-xs text-slate-500 font-semibold">
-                                    Your dominator traits is:
-                                </span>
-                                <h3 className="text-lg font-black text-sky-700 uppercase tracking-wide mt-0.5">
-                                    {dominantTrait || traitInfo.name}
-                                </h3>
-                                <p className="text-xs text-slate-600 mt-1 line-clamp-2">
-                                    {traitInfo.description}
-                                </p>
+                            <div className="text-center w-full space-y-2.5">
+                                <div>
+                                    <span className="text-xs text-slate-500 font-semibold">
+                                        Dimensi Personaliti Dominan Anda:
+                                    </span>
+                                    <h3 className="text-lg font-black text-sky-700 uppercase tracking-wide mt-0.5">
+                                        {traitInfo.name || dominantTrait}
+                                    </h3>
+                                    <p className="text-xs text-slate-600 mt-1 line-clamp-2">
+                                        {traitInfo.description}
+                                    </p>
+                                </div>
+
+                                {resolvedTopTraits.length > 0 && (
+                                    <div className="pt-2 border-t border-slate-100">
+                                        <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">
+                                            Gabungan Top {resolvedTopTraits.length} RIASEC ({imksResult?.holland_code_display || hollandCode})
+                                        </div>
+                                        <div className="flex flex-wrap items-center justify-center gap-1.5">
+                                            {resolvedTopTraits.map((item) => {
+                                                const meta = RIASEC_META[item.trait];
+                                                return (
+                                                    <span
+                                                        key={item.trait}
+                                                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border ${
+                                                            item.rank === 1
+                                                                ? meta?.primaryBadgeClass || 'bg-sky-100 text-sky-800 border-sky-200'
+                                                                : meta?.badgeClass || 'bg-slate-100 text-slate-700 border-slate-200'
+                                                        }`}
+                                                    >
+                                                        <span>#{item.rank} {item.trait}</span>
+                                                        <span className="opacity-70">({item.score}/{scoreMax})</span>
+                                                    </span>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {/* IMKS 2013 Cluster & Rounded/Exact Breakdown */}
+                <ImksBreakdownCard imksResult={imksResult} />
 
                 {/* Big Button: VIEW MATCHED PROGRAMME per Figure 3.2.1.5.4 */}
                 <div className="text-center pt-2">
@@ -222,17 +272,17 @@ export default function Show({
                         onClick={scrollToProgrammes}
                         className="inline-flex items-center gap-3 px-8 py-3.5 bg-gradient-to-r from-sky-600 to-indigo-700 hover:from-sky-700 hover:to-indigo-800 text-white font-black text-sm uppercase tracking-wider rounded-2xl shadow-lg transition transform hover:-translate-y-0.5"
                     >
-                        <span>VIEW MATCHED PROGRAMME</span>
+                        <span>LIHAT PROGRAM YANG DIPADANKAN</span>
                         <ArrowDown className="w-4 h-4" />
                     </button>
                 </div>
 
-                {/* Matched Programme List matching Figure 3.2.1.5.5 */}
+                {/* Matched Programme List */}
                 <div ref={programmeSectionRef} className="pt-4 space-y-4">
                     <div className="bg-sky-600 rounded-t-2xl px-6 py-4 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div>
                             <h2 className="text-base font-black uppercase tracking-wide">
-                                MATCHED PROGRAMME
+                                PROGRAM YANG DIPADANKAN
                             </h2>
                             <p className="text-xs text-sky-100">
                                 Senarai program IPTA yang layak berdasarkan merit ({meritScore}%) & personaliti ({dominantTrait}).
@@ -330,6 +380,11 @@ export default function Show({
                                                     )}
                                                 </div>
 
+                                                {/* RIASEC 2-3 Trait Badges */}
+                                                <div className="pt-1">
+                                                    <RiasecBadges programme={prog} showMatchScore />
+                                                </div>
+
                                                 {/* Chance badge & comparison */}
                                                 <div className="flex flex-wrap items-center gap-2 pt-1">
                                                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-extrabold border ${chance.badgeClass}`}>
@@ -355,7 +410,7 @@ export default function Show({
                                             onClick={() => setSelectedProgramme(prog)}
                                             className="px-5 py-2 bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs uppercase tracking-wider rounded-lg shadow transition shrink-0"
                                         >
-                                            DETAILS
+                                            BUTIRAN
                                         </button>
                                     </div>
                                 );
@@ -396,6 +451,15 @@ export default function Show({
                             </div>
                         </div>
 
+                        {/* RIASEC Compatibility Breakdown */}
+                        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 mb-4 space-y-2">
+                            <span className="text-xs font-extrabold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                                <Compass className="w-3.5 h-3.5" />
+                                PADANAN DIMENSI RIASEC PROGRAM
+                            </span>
+                            <RiasecBadges programme={selectedProgramme} showMatchScore dark />
+                        </div>
+
                         {/* Admission Chance Breakdown Box */}
                         {selectedProgramme.admissionChance && (
                             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 mb-4 space-y-2">
@@ -432,7 +496,7 @@ export default function Show({
                                 onClick={() => setSelectedProgramme(null)}
                                 className="px-6 py-2.5 bg-white text-sky-800 font-extrabold text-xs uppercase tracking-wider rounded-xl shadow hover:bg-sky-50 transition"
                             >
-                                TUTUP (CLOSE)
+                                TUTUP
                             </button>
                         </div>
                     </div>

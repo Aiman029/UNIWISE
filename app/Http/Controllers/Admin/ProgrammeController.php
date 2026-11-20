@@ -95,7 +95,7 @@ class ProgrammeController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'NEW PROGRAMME SUCCESSFULLY ADDED');
+        return redirect()->back()->with('success', 'PROGRAM BAHARU BERJAYA DITAMBAH');
     }
 
     /**
@@ -115,7 +115,7 @@ class ProgrammeController extends Controller
 
         $programme->update($validated);
 
-        return redirect()->back()->with('success', 'PROGRAMME UPDATE SUCCESSFULLY');
+        return redirect()->back()->with('success', 'PROGRAM BERJAYA DIKEMASKINI');
     }
 
     /**
@@ -125,6 +125,6 @@ class ProgrammeController extends Controller
     {
         $programme->delete();
 
-        return redirect()->back()->with('success', 'PROGRAMME DELETE SUCCESSFULLY');
+        return redirect()->back()->with('success', 'PROGRAM BERJAYA DIPADAM');
     }
 }

@@ -1,18 +1,19 @@
 import React from 'react';
 
 const CATEGORIES = [
-    { key: 'Realistic', label: 'Realistic (R)' },
-    { key: 'Investigative', label: 'Investigative (I)' },
-    { key: 'Artistic', label: 'Artistic (A)' },
-    { key: 'Social', label: 'Social (S)' },
-    { key: 'Enterprising', label: 'Enterprising (E)' },
-    { key: 'Conventional', label: 'Conventional (C)' },
+    { key: 'Realistic', short: 'Real', label: 'Realistik (R)' },
+    { key: 'Investigative', short: 'Invs', label: 'Investigatif (I)' },
+    { key: 'Artistic', short: 'Arti', label: 'Artistik (A)' },
+    { key: 'Social', short: 'Sosi', label: 'Sosial (S)' },
+    { key: 'Enterprising', short: 'Entr', label: 'Enterprising (E)' },
+    { key: 'Conventional', short: 'Konv', label: 'Konvensional (C)' },
 ];
 
-export default function RiasecRadarChart({ scores = {}, size = 320 }) {
+export default function RiasecRadarChart({ scores = {}, size = 320, maxVal: propMaxVal = null }) {
     const center = size / 2;
     const radius = (size / 2) - 45;
-    const maxVal = 5; // Standard 5 questions per category in seeder
+    const maxObserved = Math.max(0, ...CATEGORIES.map((cat) => Number(scores?.[cat.key] ?? 0)));
+    const maxVal = propMaxVal ?? (maxObserved > 5 ? 10 : 5);
 
     const angleStep = (Math.PI * 2) / 6;
 
@@ -33,8 +34,8 @@ export default function RiasecRadarChart({ scores = {}, size = 320 }) {
 
     const polygonPoints = dataPoints.map(p => `${p.x},${p.y}`).join(' ');
 
-    // Concentric level circles/polygons (20%, 40%, 60%, 80%, 100%)
-    const levels = [1, 2, 3, 4, 5];
+    // Concentric level polygons (20%, 40%, 60%, 80%, 100%)
+    const levels = [0.2, 0.4, 0.6, 0.8, 1.0].map((ratio) => ratio * maxVal);
 
     return (
         <div className="flex flex-col items-center justify-center">
@@ -50,10 +51,10 @@ export default function RiasecRadarChart({ scores = {}, size = 320 }) {
                         <polygon
                             key={`level-${level}`}
                             points={levelPoints}
-                            fill={level === 5 ? '#f8fafc' : 'none'}
+                            fill={level === maxVal ? '#f8fafc' : 'none'}
                             stroke="#e2e8f0"
                             strokeWidth="1.2"
-                            strokeDasharray={level < 5 ? '3 3' : 'none'}
+                            strokeDasharray={level < maxVal ? '3 3' : 'none'}
                         />
                     );
                 })}
@@ -115,7 +116,7 @@ export default function RiasecRadarChart({ scores = {}, size = 320 }) {
                             className="text-xs font-semibold fill-slate-700"
                             fontSize="11"
                         >
-                            {cat.key.slice(0, 4)}: {score}
+                            {cat.short}: {score}
                         </text>
                     );
                 })}

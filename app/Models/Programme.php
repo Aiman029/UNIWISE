@@ -21,6 +21,22 @@ class Programme extends Model
 
     public function rules()
     {
-        return $this->hasMany(RecommendationRule::class);
+        return $this->hasMany(RecommendationRule::class)->orderBy('id');
+    }
+
+    /**
+     * Return ordered unique RIASEC types for this programme (primary first, then sub-traits).
+     *
+     * @return array<int, string>
+     */
+    public function getOrderedRiasecTypes(): array
+    {
+        $rules = $this->relationLoaded('rules') ? $this->rules : $this->rules()->get();
+
+        return $rules->pluck('riasec_type')
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
     }
 }

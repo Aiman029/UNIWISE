@@ -83,17 +83,17 @@ export default function UserIndex({ users, filters }) {
 
     return (
         <AdminLayout activePage="users">
-            <Head title="User Account Management - UniWise Admin" />
+            <Head title="Pengurusan Akaun Pengguna - Pentadbir UniWise" />
 
             <div className="max-w-7xl mx-auto space-y-6">
-                {/* Header & Title matching Figure 3.2.1.6.2 */}
+                {/* Header & Title */}
                 <div className="bg-gradient-to-r from-sky-600 to-indigo-700 rounded-3xl p-6 md:p-8 text-white shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                         <span className="text-xs font-bold uppercase tracking-widest text-sky-200">
                             PENGURUSAN SISTEM
                         </span>
                         <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mt-1">
-                            USER ACCOUNT MANAGEMENT
+                            PENGURUSAN AKAUN PENGGUNA
                         </h1>
                         <p className="text-xs text-sky-100 mt-1">
                             Urus senarai akaun pelajar dan pentadbir sistem UniWise.
@@ -130,8 +130,8 @@ export default function UserIndex({ users, filters }) {
                             className="text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
                         >
                             <option value="all">Semua Peranan</option>
-                            <option value="user">Pelajar (Student)</option>
-                            <option value="admin">Pentadbir (Admin)</option>
+                            <option value="user">Pelajar</option>
+                            <option value="admin">Pentadbir</option>
                         </select>
 
                         <select
@@ -140,23 +140,23 @@ export default function UserIndex({ users, filters }) {
                             className="text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
                         >
                             <option value="all">Semua Status</option>
-                            <option value="active">Active</option>
-                            <option value="deactivated">Deactivated</option>
+                            <option value="active">Aktif</option>
+                            <option value="deactivated">Tidak Aktif</option>
                         </select>
                     </div>
                 </div>
 
-                {/* Users Table matching Figure 3.2.1.6.2 */}
+                {/* Users Table */}
                 <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-xs border-collapse">
                             <thead>
                                 <tr className="bg-sky-600 text-white font-extrabold uppercase tracking-wider text-[11px]">
-                                    <th className="py-3.5 px-5">NAME</th>
-                                    <th className="py-3.5 px-5">EMAIL ADDRESS</th>
-                                    <th className="py-3.5 px-4 text-center">ROLE</th>
+                                    <th className="py-3.5 px-5">NAMA</th>
+                                    <th className="py-3.5 px-5">ALAMAT EMEL</th>
+                                    <th className="py-3.5 px-4 text-center">PERANAN</th>
                                     <th className="py-3.5 px-4 text-center">STATUS</th>
-                                    <th className="py-3.5 px-5 text-right">ACTION</th>
+                                    <th className="py-3.5 px-5 text-right">TINDAKAN</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100 font-medium">
@@ -185,12 +185,12 @@ export default function UserIndex({ users, filters }) {
                                                 {u.role === 'admin' ? (
                                                     <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 font-extrabold text-[10px] uppercase px-2.5 py-0.5 rounded-full border border-amber-200">
                                                         <Shield className="w-3 h-3" />
-                                                        ADMIN
+                                                        PENTADBIR
                                                     </span>
                                                 ) : (
                                                     <span className="inline-flex items-center gap-1 bg-sky-50 text-sky-700 font-extrabold text-[10px] uppercase px-2.5 py-0.5 rounded-full border border-sky-200">
                                                         <User className="w-3 h-3" />
-                                                        STUDENT
+                                                        PELAJAR
                                                     </span>
                                                 )}
                                             </td>
@@ -198,25 +198,24 @@ export default function UserIndex({ users, filters }) {
                                                 {u.status === 'active' ? (
                                                     <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 font-extrabold text-[10px] uppercase px-2.5 py-0.5 rounded-full border border-emerald-200">
                                                         <CheckCircle className="w-3 h-3" />
-                                                        ACTIVE
+                                                        AKTIF
                                                     </span>
                                                 ) : (
                                                     <span className="inline-flex items-center gap-1 bg-rose-50 text-rose-700 font-extrabold text-[10px] uppercase px-2.5 py-0.5 rounded-full border border-rose-200">
                                                         <XCircle className="w-3 h-3" />
-                                                        DEACTIVATED
+                                                        TIDAK AKTIF
                                                     </span>
                                                 )}
                                             </td>
                                             <td className="py-4 px-5 text-right">
                                                 <div className="flex items-center justify-end gap-2">
-                                                    {/* Update Info Button per Figure 3.2.1.6.3 */}
                                                     <button
                                                         type="button"
                                                         onClick={() => openEditModal(u)}
                                                         className="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white rounded-lg font-bold text-[11px] uppercase tracking-wider flex items-center gap-1 shadow-sm transition"
                                                     >
                                                         <Edit2 className="w-3 h-3" />
-                                                        <span>Edit</span>
+                                                        <span>Sunting</span>
                                                     </button>
 
                                                     {/* Toggle Status Button per Figure 3.2.1.6.6 */}
@@ -302,10 +301,10 @@ export default function UserIndex({ users, filters }) {
                             </div>
                             <div>
                                 <h3 className="text-base font-black uppercase text-slate-900">
-                                    Edit User Details
+                                    Kemas Kini Butiran Pengguna
                                 </h3>
                                 <p className="text-xs text-slate-500">
-                                    Kemaskini profil & peranan pengguna
+                                    Kemas kini profil &amp; peranan pengguna
                                 </p>
                             </div>
                         </div>
@@ -334,14 +333,14 @@ export default function UserIndex({ users, filters }) {
                             </div>
 
                             <div>
-                                <label className="block text-slate-700 mb-1">Peranan (Role)</label>
+                                <label className="block text-slate-700 mb-1">Peranan</label>
                                 <select
                                     value={editForm.role}
                                     onChange={(e) => setEditForm({ ...editForm, role: e.target.value })}
                                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 font-bold"
                                 >
-                                    <option value="user">Pelajar (Student)</option>
-                                    <option value="admin">Pentadbir (Admin)</option>
+                                    <option value="user">Pelajar</option>
+                                    <option value="admin">Pentadbir</option>
                                 </select>
                             </div>
 
@@ -357,7 +356,7 @@ export default function UserIndex({ users, filters }) {
                                     type="submit"
                                     className="w-1/2 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-md transition uppercase tracking-wider"
                                 >
-                                    SAVE CHANGES
+                                    SIMPAN PERUBAHAN
                                 </button>
                             </div>
                         </form>
@@ -365,7 +364,7 @@ export default function UserIndex({ users, filters }) {
                 </div>
             )}
 
-            {/* Deactivate/Activate Confirmation Modal matching Figure 3.2.1.6.6 */}
+            {/* Deactivate/Activate Confirmation Modal */}
             {isDeactivateModalOpen && selectedUser && (
                 <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
                     <div className="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 text-center animate-scale-in border border-slate-200">
@@ -381,8 +380,8 @@ export default function UserIndex({ users, filters }) {
 
                         <h3 className="text-base font-black text-slate-900 uppercase">
                             {selectedUser.status === 'active'
-                                ? 'ARE YOU SURE WANT TO DEACTIVATE THIS ACCOUNT?'
-                                : 'ARE YOU SURE WANT TO ACTIVATE THIS ACCOUNT?'}
+                                ? 'ADAKAH ANDA PASTI MAHU MENYAHAKTIFKAN AKAUN INI?'
+                                : 'ADAKAH ANDA PASTI MAHU MENGAKTIFKAN AKAUN INI?'}
                         </h3>
                         <p className="text-xs font-bold text-slate-600 mt-1">
                             {selectedUser.name} ({selectedUser.email})
@@ -394,7 +393,7 @@ export default function UserIndex({ users, filters }) {
                                 onClick={() => setIsDeactivateModalOpen(false)}
                                 className="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition uppercase"
                             >
-                                CANCEL
+                                BATAL
                             </button>
                             <button
                                 type="button"
@@ -405,7 +404,7 @@ export default function UserIndex({ users, filters }) {
                                         : 'bg-emerald-600 hover:bg-emerald-700'
                                 }`}
                             >
-                                {selectedUser.status === 'active' ? 'DEACTIVATE' : 'ACTIVATE'}
+                                {selectedUser.status === 'active' ? 'NYAHAKTIF' : 'AKTIFKAN'}
                             </button>
                         </div>
                     </div>

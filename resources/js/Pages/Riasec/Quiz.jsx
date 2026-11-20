@@ -82,10 +82,20 @@ const CATEGORY_ORDER = [
 ];
 
 export default function Quiz({ questions = [] }) {
-    // Sort questions by Holland RIASEC category order for display only
-    // Keeps original question IDs intact so answers map identically to backend
+    const isImksMode = useMemo(
+        () => Array.isArray(questions) && questions.some((q) => q.section || q.cluster_code),
+        [questions]
+    );
+
+    // Keep official question_number order (1-85 Section A, 86-170 Section B) for IMKS;
+    // otherwise sort by canonical RIASEC order for legacy assessments.
     const sortedQuestions = useMemo(() => {
         if (!Array.isArray(questions)) return [];
+        if (isImksMode) {
+            return [...questions].sort(
+                (a, b) => (a.question_number ?? a.id ?? 0) - (b.question_number ?? b.id ?? 0)
+            );
+        }
         return [...questions].sort((a, b) => {
             const orderA = CATEGORY_ORDER.indexOf(a.category);
             const orderB = CATEGORY_ORDER.indexOf(b.category);
@@ -94,7 +104,7 @@ export default function Quiz({ questions = [] }) {
             if (rankA !== rankB) return rankA - rankB;
             return (a.id ?? 0) - (b.id ?? 0);
         });
-    }, [questions]);
+    }, [questions, isImksMode]);
 
     const totalQuestions = sortedQuestions.length;
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -211,16 +221,28 @@ export default function Quiz({ questions = [] }) {
         };
         setAnswers(updatedAnswers);
 
-        // Check if current question is the last of this category
+        // Check if transitioning to Bahagian B (IMKS) or next category (legacy)
         const nextIndex = currentIndex + 1;
-        const isEndOfCategory =
-            nextIndex < totalQuestions && sortedQuestions[nextIndex]?.category !== currentQ.category;
+        const nextQ = sortedQuestions[nextIndex];
+        const isEndOfSectionA = isImksMode && nextIndex < totalQuestions && currentQ.section === 'A' && nextQ?.section === 'B';
+        const isEndOfCategory = !isImksMode && nextIndex < totalQuestions && nextQ?.category !== currentQ.category;
         const isLastQuestionOverall = nextIndex >= totalQuestions;
 
         setTimeout(() => {
-            if (isEndOfCategory) {
+            if (isEndOfSectionA) {
+                setMilestone({
+                    title: 'Tahniah! Bahagian A Selesai.',
+                    subtitle: 'Anda telah melengkapkan 85 item Tema Pekerjaan.',
+                    nextLabel: 'Bahagian B: Nama Pekerjaan (86–170)',
+                    emoji: '🎯',
+                    nextIndex,
+                });
+
+                milestoneTimerRef.current = setTimeout(() => {
+                    handleDismissMilestone(nextIndex);
+                }, 2500);
+            } else if (isEndOfCategory) {
                 // Trigger chapter milestone banner for ~2.5 seconds
-                const nextQ = sortedQuestions[nextIndex];
                 const nextTraitConfig = TRAIT_CONFIG[nextQ?.category] || {
                     name: nextQ?.category || 'Seterusnya',
                     emoji: '✨',
@@ -228,8 +250,10 @@ export default function Quiz({ questions = [] }) {
                 };
 
                 setMilestone({
-                    completedTrait: currentTrait,
-                    nextTrait: nextTraitConfig,
+                    title: `Tahniah! Ciri ${currentTrait.name} Selesai.`,
+                    subtitle: 'Anda telah melengkapkan semua soalan untuk ciri ini.',
+                    nextLabel: `${nextTraitConfig.name} ${nextTraitConfig.emoji}`,
+                    emoji: currentTrait.emoji,
                     nextIndex,
                 });
 
@@ -283,18 +307,32 @@ export default function Quiz({ questions = [] }) {
 
         if (currentIndex < totalQuestions - 1) {
             const nextIndex = currentIndex + 1;
-            const isEndOfCategory = sortedQuestions[nextIndex]?.category !== currentQ.category;
+            const nextQ = sortedQuestions[nextIndex];
+            const isEndOfSectionA = isImksMode && currentQ.section === 'A' && nextQ?.section === 'B';
+            const isEndOfCategory = !isImksMode && nextQ?.category !== currentQ.category;
 
-            if (isEndOfCategory) {
-                const nextQ = sortedQuestions[nextIndex];
+            if (isEndOfSectionA) {
+                setMilestone({
+                    title: 'Tahniah! Bahagian A Selesai.',
+                    subtitle: 'Anda telah melengkapkan 85 item Tema Pekerjaan.',
+                    nextLabel: 'Bahagian B: Nama Pekerjaan (86–170)',
+                    emoji: '🎯',
+                    nextIndex,
+                });
+                milestoneTimerRef.current = setTimeout(() => {
+                    handleDismissMilestone(nextIndex);
+                }, 2500);
+            } else if (isEndOfCategory) {
                 const nextTraitConfig = TRAIT_CONFIG[nextQ?.category] || {
                     name: nextQ?.category || 'Seterusnya',
                     emoji: '✨',
                     desc: 'Dimensi Minat Seterusnya',
                 };
                 setMilestone({
-                    completedTrait: currentTrait,
-                    nextTrait: nextTraitConfig,
+                    title: `Tahniah! Ciri ${currentTrait.name} Selesai.`,
+                    subtitle: 'Anda telah melengkapkan semua soalan untuk ciri ini.',
+                    nextLabel: `${nextTraitConfig.name} ${nextTraitConfig.emoji}`,
+                    emoji: currentTrait.emoji,
                     nextIndex,
                 });
                 milestoneTimerRef.current = setTimeout(() => {
@@ -309,7 +347,7 @@ export default function Quiz({ questions = [] }) {
         }
     };
 
-    // Keyboard shortcuts (Y/1, N/2/0, Enter, ArrowKeys, Backspace)
+    // Keyboard shortcuts (Y/1, T/N/2/0, Enter, ArrowKeys, Backspace)
     useEffect(() => {
         const handleKeyDown = (e) => {
             // Ignore if active inside an input element or while transitioning/submitting
@@ -329,7 +367,7 @@ export default function Quiz({ questions = [] }) {
             if (e.key === 'y' || e.key === 'Y' || e.key === '1') {
                 e.preventDefault();
                 handleSelect(1);
-            } else if (e.key === 'n' || e.key === 'N' || e.key === '2' || e.key === '0') {
+            } else if (e.key === 't' || e.key === 'T' || e.key === 'n' || e.key === 'N' || e.key === '2' || e.key === '0') {
                 e.preventDefault();
                 handleSelect(0);
             } else if (e.key === 'Enter' || e.key === 'ArrowRight') {
@@ -369,14 +407,16 @@ export default function Quiz({ questions = [] }) {
                             <Sparkles className="w-3.5 h-3.5" />
                         </span>
                         <span className="font-display font-bold text-slate-900 tracking-tight">
-                            Inventori Minat Kerjaya Holland (RIASEC)
+                            {isImksMode ? 'Inventori Minat Kerjaya Sidek (IMKS 2013)' : 'Inventori Minat Kerjaya Holland (RIASEC)'}
                         </span>
                     </div>
 
                     <div className="flex items-center gap-2 sm:gap-3 text-[11px] sm:text-xs">
-                        {/* Current Trait Progress Pill */}
+                        {/* Current Section / Trait Progress Pill */}
                         <span className="bg-slate-100 text-slate-700 font-bold px-2.5 py-1 rounded-full border border-slate-200/80">
-                            Ciri {currentTrait.name} · {indexInCategory}/{totalInCategory}
+                            {isImksMode
+                                ? `Bhg. ${currentQ.section || 'A'} · ${currentQ.cluster_code || currentTrait.code}`
+                                : `Ciri ${currentTrait.name} · ${indexInCategory}/${totalInCategory}`}
                         </span>
                         <span className="text-slate-400 font-medium">
                             Dijawab: <strong className="text-slate-700">{answeredCount}</strong>/{totalQuestions}
@@ -406,21 +446,21 @@ export default function Quiz({ questions = [] }) {
                             }`}
                         >
                             <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center text-3xl shadow-sm mb-4">
-                                {milestone.completedTrait.emoji}
+                                {milestone.emoji}
                             </div>
 
                             <span className="text-xs font-bold text-amber-600 uppercase tracking-widest bg-amber-50 px-3 py-1 rounded-full border border-amber-200/70 mb-2">
-                                Bab Selesai
+                                Bahagian Selesai
                             </span>
 
                             <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
-                                Tahniah! Ciri {milestone.completedTrait.name} Selesai.
+                                {milestone.title}
                             </h3>
 
                             <p className="text-sm text-slate-600 max-w-md mx-auto mb-6">
-                                Anda telah melengkapkan semua soalan untuk ciri ini.{' '}
+                                {milestone.subtitle}{' '}
                                 <span className="font-bold text-slate-900 block mt-1">
-                                    Seterusnya: {milestone.nextTrait.name} {milestone.nextTrait.emoji}
+                                    Seterusnya: {milestone.nextLabel}
                                 </span>
                             </p>
 
@@ -455,16 +495,22 @@ export default function Quiz({ questions = [] }) {
                                 : 'animate-fade-in'
                         }
                     >
-                        {/* Trait Badge & Description */}
-                        <div className="flex flex-col items-center">
+                        {/* Trait / IMKS Section & Cluster Badge */}
+                        <div className="flex flex-col items-center gap-1.5">
                             <div
                                 className={`inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full border shadow-2xs ${currentTrait.badge}`}
                             >
                                 <span className="text-sm leading-none">{currentTrait.emoji}</span>
-                                <span>{currentTrait.name} ({currentTrait.code})</span>
+                                <span>
+                                    {isImksMode
+                                        ? `${currentQ.section === 'B' ? 'Bahagian B: Nama Pekerjaan' : 'Bahagian A: Tema Pekerjaan'} • ${currentQ.cluster_name || currentTrait.name}`
+                                        : `${currentTrait.name} (${currentTrait.code})`}
+                                </span>
                             </div>
-                            <span className="text-xs text-slate-500 mt-1.5 font-medium">
-                                {currentTrait.desc}
+                            <span className="text-xs text-slate-500 font-medium">
+                                {isImksMode
+                                    ? `Kluster ${currentQ.cluster_code} • Kategori ${currentTrait.name} (${currentTrait.code})`
+                                    : currentTrait.desc}
                             </span>
                         </div>
 
@@ -477,7 +523,11 @@ export default function Quiz({ questions = [] }) {
                                 "{currentQ.question_text}"
                             </h2>
                             <p className="text-xs sm:text-sm text-slate-500 mt-3 font-normal">
-                                Adakah aktiviti ini menarik minat anda? Pilih jawapan yang paling mencerminkan diri anda.
+                                {isImksMode && currentQ.section === 'B'
+                                    ? 'Adakah anda BERMINAT (Y) atau TIDAK BERMINAT (T) dengan nama pekerjaan ini?'
+                                    : isImksMode
+                                    ? 'Adakah anda SUKA (Y) atau TIDAK SUKA (T) dengan tema pekerjaan ini?'
+                                    : 'Adakah aktiviti ini menarik minat anda? Pilih jawapan yang paling mencerminkan diri anda.'}
                             </p>
                         </div>
                     </div>
@@ -506,14 +556,14 @@ export default function Quiz({ questions = [] }) {
                                     ? `bg-emerald-600 text-white border-2 border-emerald-600 shadow-md ring-4 ring-emerald-100 ${
                                           feedbackVal === 1 && !prefersReducedMotion ? 'motion-safe:animate-pulse' : ''
                                       }`
-                                    : 'border-2 border-emerald-200/90 bg-emerald-50/60 hover:bg-emerald-100/70 text-emerald-950 hover:border-emerald-300'
+                                    : 'border-2 border-slate-200 bg-white hover:bg-emerald-50/50 text-slate-800 hover:border-emerald-400'
                             }`}
                         >
                             <span className="w-7 text-left">
                                 {isYaActive ? (
                                     <Check className="w-5 h-5 text-white stroke-[3]" />
                                 ) : (
-                                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block" />
+                                    <span className="w-2.5 h-2.5 rounded-full bg-slate-300 inline-block" />
                                 )}
                             </span>
                             <span className="flex-1 text-center font-display tracking-wide text-base sm:text-lg">
@@ -523,7 +573,7 @@ export default function Quiz({ questions = [] }) {
                                 className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-md border ${
                                     isYaActive
                                         ? 'bg-white/20 text-white border-white/20'
-                                        : 'bg-emerald-200/50 text-emerald-800 border-emerald-300/40'
+                                        : 'bg-slate-100 text-slate-600 border-slate-200'
                                 }`}
                             >
                                 Y / 1
@@ -559,7 +609,7 @@ export default function Quiz({ questions = [] }) {
                                         : 'bg-slate-100 text-slate-600 border-slate-200'
                                 }`}
                             >
-                                N / 2
+                                T / N / 2
                             </span>
                         </button>
 
@@ -567,7 +617,7 @@ export default function Quiz({ questions = [] }) {
                         <div className="hidden sm:flex items-center justify-center gap-1.5 text-[11px] text-slate-400 pt-1">
                             <Keyboard className="w-3.5 h-3.5 text-slate-400" />
                             <span>
-                                Petua: Tekan <strong>Y</strong> / <strong>N</strong> pada papan kekunci untuk auto-mara.
+                                Petua: Tekan <strong>Y</strong> (Ya) atau <strong>T</strong> / <strong>N</strong> (Tidak) untuk auto-mara.
                             </span>
                         </div>
                     </div>

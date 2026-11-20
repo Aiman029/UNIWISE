@@ -83,8 +83,8 @@ class AcademicResultController extends Controller
         // Check for duplicates
         if (count($subjects) !== count(array_unique($subjects))) {
             return back()->withErrors([
-                'duplicate' => 'SUBJECT DUPLICATE',
-            ])->with('error', 'SUBJECT DUPLICATE');
+                'duplicate' => 'Terdapat mata pelajaran berulang. Sila pastikan setiap subjek unik.',
+            ])->with('error', 'Terdapat mata pelajaran berulang. Sila pastikan setiap subjek unik.');
         }
 
         // Verify all universal subjects are present
@@ -113,6 +113,6 @@ class AcademicResultController extends Controller
             }
         }
 
-        return redirect()->route('dashboard')->with('success', 'ACADEMIC RESULT SUCCESSFULLY ADDED');
+        return redirect()->route('dashboard')->with('success', 'KEPUTUSAN AKADEMIK BERJAYA DISIMPAN');
     }
 }

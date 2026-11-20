@@ -1,7 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import UserLayout from '@/Layouts/UserLayout';
+import RiasecBadges from '@/Components/RiasecBadges';
 import { calculateAdmissionChance } from '@/Utils/admissionChance';
+import { RIASEC_META, RIASEC_ORDER, getProgrammeRiasecTypes } from '@/Utils/riasec';
 import {
     School,
     BookOpen,
@@ -23,12 +25,14 @@ import {
     ChevronRight,
     ArrowUpDown,
     FileText,
+    Compass,
 } from 'lucide-react';
 
 export default function Index({
     programmes = [],
     universities = [],
     userMeritScore = null,
+    userTopTraits = [],
     stats = {},
 }) {
     const [selectedProgramme, setSelectedProgramme] = useState(null);
@@ -38,8 +42,14 @@ export default function Index({
     const [selectedInst, setSelectedInst] = useState('all');
     const [selectedLevel, setSelectedLevel] = useState('all');
     const [selectedTag, setSelectedTag] = useState('all');
+    const [selectedRiasec, setSelectedRiasec] = useState('all');
     const [selectedChance, setSelectedChance] = useState('all');
     const [selectedSort, setSelectedSort] = useState(userMeritScore ? 'chance_desc' : 'name_asc');
+
+    const userTopTraitNames = useMemo(
+        () => (Array.isArray(userTopTraits) ? userTopTraits.map((t) => t.trait).filter(Boolean) : []),
+        [userTopTraits]
+    );
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -100,6 +110,18 @@ export default function Index({
                 if (selectedTag === 'temuduga' && !notes.includes('temuduga')) return false;
             }
 
+            // RIASEC dimension filter
+            if (selectedRiasec !== 'all') {
+                const progTypes = getProgrammeRiasecTypes(p);
+                if (selectedRiasec === 'my_top') {
+                    const overlap = progTypes.filter((t) => userTopTraitNames.includes(t));
+                    const required = userTopTraitNames.length >= 2 ? 2 : 1;
+                    if (overlap.length < required) return false;
+                } else if (!progTypes.includes(selectedRiasec)) {
+                    return false;
+                }
+            }
+
             // Chance filter (only if user has merit)
             if (userMeritScore && selectedChance !== 'all') {
                 if (selectedChance === 'tinggi' && p.admissionChance?.status !== 'tinggi') return false;
@@ -113,6 +135,10 @@ export default function Index({
 
         // Sorting
         list.sort((a, b) => {
+            if (selectedSort === 'riasec_desc' && userTopTraitNames.length > 0) {
+                const diffRiasec = (b.riasec_match?.score ?? 0) - (a.riasec_match?.score ?? 0);
+                if (diffRiasec !== 0) return diffRiasec;
+            }
             if (selectedSort === 'chance_desc' && userMeritScore) {
                 if (a.admissionChance?.priority !== b.admissionChance?.priority) {
                     return (a.admissionChance?.priority ?? 9) - (b.admissionChance?.priority ?? 9);
@@ -139,9 +165,11 @@ export default function Index({
         selectedInst,
         selectedLevel,
         selectedTag,
+        selectedRiasec,
         selectedChance,
         selectedSort,
         userMeritScore,
+        userTopTraitNames,
     ]);
 
     // Reset pagination when filter changes
@@ -291,8 +319,11 @@ export default function Index({
                             <select
                                 value={selectedSort}
                                 onChange={(e) => handleFilterChange(setSelectedSort, e.target.value)}
-                                className="w-full md:w-56 py-3 px-3.5 rounded-2xl border border-slate-200 text-xs font-bold text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                                className="w-full md:w-60 py-3 px-3.5 rounded-2xl border border-slate-200 text-xs font-bold text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-500"
                             >
+                                {userTopTraitNames.length > 0 && (
+                                    <option value="riasec_desc">Keserasian RIASEC Saya</option>
+                                )}
                                 {userMeritScore && (
                                     <option value="chance_desc">Peluang Terbaik Dahulu</option>
                                 )}
@@ -305,7 +336,7 @@ export default function Index({
                     </div>
 
                     {/* Filter Pills Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 border-t border-slate-100">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-2 border-t border-slate-100">
                         {/* University Filter */}
                         <div>
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
@@ -337,8 +368,8 @@ export default function Index({
                             >
                                 <option value="all">Semua Peringkat</option>
                                 <option value="Diploma">Diploma</option>
-                                <option value="Foundation">Asasi (Foundation)</option>
-                                <option value="Certificate">Sijil (Certificate)</option>
+                                <option value="Foundation">Asasi</option>
+                                <option value="Certificate">Sijil</option>
                             </select>
                         </div>
 
@@ -356,6 +387,30 @@ export default function Index({
                                 <option value="stem">Bidang STEM Sahaja</option>
                                 <option value="tvet">Bidang TVET Sahaja</option>
                                 <option value="temuduga">Kemasukan Temuduga / Ujian</option>
+                            </select>
+                        </div>
+
+                        {/* RIASEC Dimension Filter */}
+                        <div>
+                            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                                Dimensi RIASEC
+                            </label>
+                            <select
+                                value={selectedRiasec}
+                                onChange={(e) => handleFilterChange(setSelectedRiasec, e.target.value)}
+                                className="w-full py-2 px-3 rounded-xl border border-slate-200 text-xs text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                            >
+                                <option value="all">Semua Dimensi RIASEC</option>
+                                {userTopTraitNames.length > 0 && (
+                                    <option value="my_top">
+                                        Sesuai Top RIASEC Saya ({userTopTraitNames.map((t) => RIASEC_META[t]?.code).join('-')})
+                                    </option>
+                                )}
+                                {RIASEC_ORDER.map((trait) => (
+                                    <option key={trait} value={trait}>
+                                        {RIASEC_META[trait]?.code} - {RIASEC_META[trait]?.labelMs}
+                                    </option>
+                                ))}
                             </select>
                         </div>
 
@@ -388,13 +443,14 @@ export default function Index({
                     <div className="flex items-center justify-between pt-2 text-xs text-slate-500 font-medium">
                         <span>
                             Menjumpai <strong>{filteredProgrammes.length}</strong> program pengajian
-                            {(searchQuery || selectedInst !== 'all' || selectedLevel !== 'all' || selectedTag !== 'all' || selectedChance !== 'all') && (
+                            {(searchQuery || selectedInst !== 'all' || selectedLevel !== 'all' || selectedTag !== 'all' || selectedRiasec !== 'all' || selectedChance !== 'all') && (
                                 <button
                                     onClick={() => {
                                         setSearchQuery('');
                                         setSelectedInst('all');
                                         setSelectedLevel('all');
                                         setSelectedTag('all');
+                                        setSelectedRiasec('all');
                                         setSelectedChance('all');
                                         setCurrentPage(1);
                                     }}
@@ -461,23 +517,34 @@ export default function Index({
                                             <span className="truncate">{prog.institution}</span>
                                         </div>
 
-                                        {/* Tags (STEM, TVET, Temuduga) */}
-                                        <div className="flex flex-wrap gap-1.5 pt-1">
-                                            {isSTEM && (
-                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                                    <Cpu className="w-3 h-3" /> STEM
-                                                </span>
+                                        {/* Tags (STEM, TVET, Temuduga) & RIASEC Badges */}
+                                        <div className="space-y-2 pt-1">
+                                            {(isSTEM || isTVET || isInterview) && (
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {isSTEM && (
+                                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                            <Cpu className="w-3 h-3" /> STEM
+                                                        </span>
+                                                    )}
+                                                    {isTVET && (
+                                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                                                            <Wrench className="w-3 h-3" /> TVET
+                                                        </span>
+                                                    )}
+                                                    {isInterview && (
+                                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
+                                                            Temu duga
+                                                        </span>
+                                                    )}
+                                                </div>
                                             )}
-                                            {isTVET && (
-                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                                                    <Wrench className="w-3 h-3" /> TVET
-                                                </span>
-                                            )}
-                                            {isInterview && (
-                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
-                                                    Temu duga
-                                                </span>
-                                            )}
+
+                                            <RiasecBadges
+                                                programme={prog}
+                                                compact
+                                                showPrimaryTag
+                                                showMatchScore={userTopTraitNames.length > 0}
+                                            />
                                         </div>
 
                                         {/* Merit Score Section */}
@@ -545,6 +612,7 @@ export default function Index({
                                 setSelectedInst('all');
                                 setSelectedLevel('all');
                                 setSelectedTag('all');
+                                setSelectedRiasec('all');
                                 setSelectedChance('all');
                                 setCurrentPage(1);
                             }}
@@ -704,6 +772,19 @@ export default function Index({
                                 </div>
                             </div>
 
+                            {/* RIASEC Dimensions Section */}
+                            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+                                <span className="text-slate-500 flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider">
+                                    <Compass className="w-3.5 h-3.5 text-sky-600" />
+                                    Dimensi Personaliti RIASEC (Utama &amp; Sub)
+                                </span>
+                                <RiasecBadges
+                                    programme={selectedProgramme}
+                                    showPrimaryTag
+                                    showMatchScore={userTopTraitNames.length > 0}
+                                />
+                            </div>
+
                             {/* Entry Requirements */}
                             <div className="space-y-2">
                                 <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-700">
@@ -721,7 +802,7 @@ export default function Index({
                                     Laluan Pengajian Seterusnya
                                 </h4>
                                 <p className="text-xs text-slate-600 leading-relaxed">
-                                    Graduan program ini layak memohon kemasukan ke peringkat Ijazah Sarjana Muda (*Degree*) di universiti awam tempatan melalui saluran UPUOnline lepasan Diploma/Asasi.
+                                    Graduan program ini layak memohon kemasukan ke peringkat Ijazah Sarjana Muda di universiti awam tempatan melalui saluran UPUOnline lepasan Diploma/Asasi.
                                 </p>
                             </div>
 

@@ -37,13 +37,13 @@ export default function Edit({ user }) {
 
     return (
         <UserLayout activePage="profile">
-            <Head title="Edit Profil - UniWise" />
+            <Head title="Kemas Kini Profil - UniWise" />
 
             <div className="max-w-3xl mx-auto">
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h1 className="text-2xl font-bold text-slate-800">Edit Profil</h1>
-                        <p className="text-sm text-slate-500">Kemaskini nama, foto profil, dan kata laluan anda.</p>
+                        <h1 className="text-2xl font-bold text-slate-800">Kemas Kini Profil</h1>
+                        <p className="text-sm text-slate-500">Kemas kini nama, foto profil, dan kata laluan anda.</p>
                     </div>
                     <Link
                         href="/profile"
@@ -54,12 +54,12 @@ export default function Edit({ user }) {
                     </Link>
                 </div>
 
-                {/* Password Mismatch Alert Banner per Figure 3.2.1.2.5 */}
+                {/* Password Mismatch Alert Banner */}
                 {(errors.current_password || errors.new_password) && (
                     <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 flex items-start gap-3">
                         <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600" />
                         <div className="text-sm font-medium">
-                            {errors.current_password || errors.new_password || 'Your current password/New password is not matched'}
+                            {errors.current_password || errors.new_password || 'Kata laluan semasa atau pengesahan kata laluan baharu tidak sepadan.'}
                         </div>
                     </div>
                 )}
@@ -69,7 +69,7 @@ export default function Edit({ user }) {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                         <div className="md:col-span-2">
                             <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                                NAMA LENGKAP (NAME)
+                                NAMA PENUH
                             </label>
                             <input
                                 type="text"
@@ -84,16 +84,16 @@ export default function Edit({ user }) {
                             )}
                         </div>
 
-                        {/* Upload Profile Photo per Figure 3.2.1.2.3 */}
+                        {/* Upload Profile Photo */}
                         <div className="flex flex-col items-center justify-center">
                             <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 text-center">
-                                UPLOAD PROFILE PHOTO
+                                MUAT NAIK FOTO PROFIL
                             </label>
                             <label className="cursor-pointer group relative w-24 h-24 rounded-full border-2 border-dashed border-slate-300 hover:border-sky-500 bg-slate-50 flex items-center justify-center overflow-hidden transition">
                                 {avatarPreview ? (
                                     <img
                                         src={avatarPreview}
-                                        alt="Preview"
+                                        alt="Pratonton"
                                         className="w-full h-full object-cover"
                                     />
                                 ) : (
@@ -118,14 +118,14 @@ export default function Edit({ user }) {
                     {/* Password Section */}
                     <div className="pt-6 border-t border-slate-100">
                         <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4">
-                            Tukar Kata Laluan (Optional)
+                            Tukar Kata Laluan (Pilihan)
                         </h3>
 
                         <div className="space-y-4 max-w-lg">
                             {/* Current Password */}
                             <div>
                                 <label className="block text-xs font-medium text-slate-600 mb-1">
-                                    Current Password
+                                    Kata Laluan Semasa
                                 </label>
                                 <div className="relative">
                                     <input
@@ -149,7 +149,7 @@ export default function Edit({ user }) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-xs font-medium text-slate-600 mb-1">
-                                        New Password
+                                        Kata Laluan Baharu
                                     </label>
                                     <div className="relative">
                                         <input
@@ -171,7 +171,7 @@ export default function Edit({ user }) {
 
                                 <div>
                                     <label className="block text-xs font-medium text-slate-600 mb-1">
-                                        Confirm New Password
+                                        Sahkan Kata Laluan Baharu
                                     </label>
                                     <div className="relative">
                                         <input
@@ -194,7 +194,7 @@ export default function Edit({ user }) {
                         </div>
                     </div>
 
-                    {/* Save Button per Figure 3.2.1.2.3 */}
+                    {/* Save Button */}
                     <div className="pt-6 border-t border-slate-100 flex justify-end">
                         <button
                             type="submit"
@@ -202,7 +202,7 @@ export default function Edit({ user }) {
                             className="inline-flex items-center gap-2 px-7 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl shadow transition disabled:opacity-50"
                         >
                             <Save className="w-4 h-4" />
-                            <span>{processing ? 'MENYIMPAN...' : 'SAVE'}</span>
+                            <span>{processing ? 'MENYIMPAN...' : 'SIMPAN'}</span>
                         </button>
                     </div>
                 </form>

@@ -54,13 +54,13 @@ class AdminManagementTest extends TestCase
             'min_grade' => 'C',
         ]);
 
-        $response->assertSessionHas('success', 'NEW PROGRAMME SUCCESSFULLY ADDED');
+        $response->assertSessionHas('success', 'PROGRAM BAHARU BERJAYA DITAMBAH');
 
         $prog = Programme::where('code', 'TEST9999')->first();
         $this->assertNotNull($prog);
 
         $deleteResponse = $this->actingAs($admin)->delete("/admin/programmes/{$prog->id}");
-        $deleteResponse->assertSessionHas('success', 'PROGRAMME DELETE SUCCESSFULLY');
+        $deleteResponse->assertSessionHas('success', 'PROGRAM BERJAYA DIPADAM');
         $this->assertNull(Programme::where('code', 'TEST9999')->first());
     }
 }

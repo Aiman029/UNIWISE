@@ -114,17 +114,17 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
 
     return (
         <AdminLayout activePage="programmes">
-            <Head title="Programme Info Management - UniWise Admin" />
+            <Head title="Pengurusan Maklumat Program - Pentadbir UniWise" />
 
             <div className="max-w-7xl mx-auto space-y-6">
-                {/* Header matching Figure 3.2.1.7.2 */}
+                {/* Header */}
                 <div className="bg-gradient-to-r from-sky-600 to-indigo-700 rounded-3xl p-6 md:p-8 text-white shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                         <span className="text-xs font-bold uppercase tracking-widest text-sky-200">
                             PENGURUSAN DATA PROGRAM
                         </span>
                         <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mt-1">
-                            PROGRAMME INFO MANAGEMENT
+                            PENGURUSAN MAKLUMAT PROGRAM
                         </h1>
                         <p className="text-xs text-sky-100 mt-1">
                             Pangkalan data program Diploma, Asasi, dan Sijil IPTA Malaysia.
@@ -138,7 +138,7 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
                             className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-md transition"
                         >
                             <Plus className="w-4 h-4" />
-                            <span>+ ADD NEW PROGRAMME</span>
+                            <span>TAMBAH PROGRAM BAHARU</span>
                         </button>
                     </div>
                 </div>
@@ -196,11 +196,11 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
                         <table className="w-full text-left text-xs border-collapse">
                             <thead>
                                 <tr className="bg-sky-600 text-white font-extrabold uppercase tracking-wider text-[11px]">
-                                    <th className="py-3.5 px-5">PROGRAM NAME</th>
-                                    <th className="py-3.5 px-4 text-center">LEVEL</th>
-                                    <th className="py-3.5 px-5">INSTITUTION</th>
+                                    <th className="py-3.5 px-5">NAMA PROGRAM</th>
+                                    <th className="py-3.5 px-4 text-center">PERINGKAT</th>
+                                    <th className="py-3.5 px-5">INSTITUSI</th>
                                     <th className="py-3.5 px-4 text-center">MERIT UPU</th>
-                                    <th className="py-3.5 px-5 text-right">ACTION</th>
+                                    <th className="py-3.5 px-5 text-right">TINDAKAN</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100 font-medium">
@@ -328,7 +328,7 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
                             </div>
                             <div>
                                 <h3 className="text-base font-black uppercase text-slate-900">
-                                    ADD NEW PROGRAMME
+                                    TAMBAH PROGRAM BAHARU
                                 </h3>
                                 <p className="text-xs text-slate-500">
                                     Tambah program pengajian IPTA baharu ke dalam sistem
@@ -377,20 +377,20 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 <div>
-                                    <label className="block text-slate-700 mb-1">Peringkat (Level)</label>
+                                    <label className="block text-slate-700 mb-1">Peringkat Pengajian</label>
                                     <select
                                         value={formData.level}
                                         onChange={(e) => setFormData({ ...formData, level: e.target.value })}
                                         className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 font-bold"
                                     >
                                         <option value="Diploma">Diploma</option>
-                                        <option value="Foundation">Foundation (Asasi)</option>
-                                        <option value="Certificate">Certificate (Sijil)</option>
+                                        <option value="Foundation">Asasi</option>
+                                        <option value="Certificate">Sijil</option>
                                     </select>
                                 </div>
 
                                 <div>
-                                    <label className="block text-slate-700 mb-1">Institusi (Institution)</label>
+                                    <label className="block text-slate-700 mb-1">Institusi</label>
                                     <select
                                         value={formData.institution}
                                         onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
@@ -413,12 +413,12 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
                                         onChange={(e) => setFormData({ ...formData, riasec_type: e.target.value })}
                                         className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 font-bold"
                                     >
-                                        <option value="Realistic">Realistic (Teknikal/Kejuruteraan)</option>
-                                        <option value="Investigative">Investigative (Sains/Sains Komputer)</option>
-                                        <option value="Artistic">Artistic (Seni/Reka Bentuk/Media)</option>
-                                        <option value="Social">Social (Pendidikan/Kesihatan)</option>
+                                        <option value="Realistic">Realistik (Teknikal/Kejuruteraan)</option>
+                                        <option value="Investigative">Investigatif (Sains/Sains Komputer)</option>
+                                        <option value="Artistic">Artistik (Seni/Reka Bentuk/Media)</option>
+                                        <option value="Social">Sosial (Pendidikan/Kesihatan)</option>
                                         <option value="Enterprising">Enterprising (Perniagaan/Pengurusan)</option>
-                                        <option value="Conventional">Conventional (Perakaunan/Pentadbiran)</option>
+                                        <option value="Conventional">Konvensional (Perakaunan/Pentadbiran)</option>
                                     </select>
                                 </div>
 
@@ -443,7 +443,7 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
                             </div>
 
                             <div>
-                                <label className="block text-slate-700 mb-1">Syarat Kemasukan (Entry Requirement)</label>
+                                <label className="block text-slate-700 mb-1">Syarat Kemasukan (SPM)</label>
                                 <textarea
                                     required
                                     rows="3"
@@ -476,7 +476,7 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
                                     type="submit"
                                     className="w-1/2 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-md transition uppercase tracking-wider"
                                 >
-                                    ADD PROGRAMME
+                                    TAMBAH PROGRAM
                                 </button>
                             </div>
                         </form>
@@ -484,7 +484,7 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
                 </div>
             )}
 
-            {/* Edit Programme Modal matching Figure 3.2.1.7.8 */}
+            {/* Edit Programme Modal */}
             {isEditModalOpen && selectedProgramme && (
                 <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
                     <div className="bg-white rounded-3xl shadow-2xl max-w-xl w-full p-6 animate-scale-in border border-slate-200 relative max-h-[90vh] overflow-y-auto">
@@ -502,7 +502,7 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
                             </div>
                             <div>
                                 <h3 className="text-base font-black uppercase text-slate-900">
-                                    EDIT PROGRAMME
+                                    SUNTING PROGRAM
                                 </h3>
                                 <p className="text-xs text-slate-500">
                                     Kemaskini butiran program IPTA
@@ -609,7 +609,7 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
                                     type="submit"
                                     className="w-1/2 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-md transition uppercase tracking-wider"
                                 >
-                                    UPDATE PROGRAMME
+                                    KEMAS KINI PROGRAM
                                 </button>
                             </div>
                         </form>
@@ -617,7 +617,7 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
                 </div>
             )}
 
-            {/* Delete Programme Confirmation Dialog matching Figure 3.2.1.7.6 */}
+            {/* Delete Programme Confirmation Dialog */}
             {isDeleteModalOpen && selectedProgramme && (
                 <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
                     <div className="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 text-center animate-scale-in border border-slate-200">
@@ -626,7 +626,7 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
                         </div>
 
                         <h3 className="text-base font-black text-slate-900 uppercase">
-                            ARE YOU SURE WANT TO DELETE THIS PROGRAMME?
+                            ADAKAH ANDA PASTI MAHU MEMADAM PROGRAM INI?
                         </h3>
                         <p className="text-xs font-bold text-slate-600 mt-2 uppercase">
                             {selectedProgramme.name}
@@ -641,14 +641,14 @@ export default function ProgrammeIndex({ programmes, institutions = [], filters 
                                 onClick={() => setIsDeleteModalOpen(false)}
                                 className="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition uppercase"
                             >
-                                CANCEL
+                                BATAL
                             </button>
                             <button
                                 type="button"
                                 onClick={confirmDelete}
                                 className="w-1/2 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition uppercase"
                             >
-                                DELETE
+                                PADAM
                             </button>
                         </div>
                     </div>

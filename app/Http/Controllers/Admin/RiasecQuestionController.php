@@ -54,7 +54,7 @@ class RiasecQuestionController extends Controller
 
         RiasecQuestion::create($validated);
 
-        return redirect()->back()->with('success', 'NEW QUESTION SUCCESSFULLY ADDED');
+        return redirect()->back()->with('success', 'SOALAN BAHARU BERJAYA DITAMBAH');
     }
 
     /**
@@ -69,7 +69,7 @@ class RiasecQuestionController extends Controller
 
         $question->update($validated);
 
-        return redirect()->back()->with('success', 'RIASEC QUESTION UPDATE SUCCESSFULLY');
+        return redirect()->back()->with('success', 'SOALAN RIASEC BERJAYA DIKEMASKINI');
     }
 
     /**
@@ -79,6 +79,6 @@ class RiasecQuestionController extends Controller
     {
         $question->delete();
 
-        return redirect()->back()->with('success', 'RIASEC QUESTION DELETE SUCCESSFULLY');
+        return redirect()->back()->with('success', 'SOALAN RIASEC BERJAYA DIPADAM');
     }
 }

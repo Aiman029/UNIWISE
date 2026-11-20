@@ -84,7 +84,7 @@ export default function Dashboard({
 
     return (
         <UserLayout activePage="dashboard">
-            <Head title="User Dashboard - UniWise" />
+            <Head title="Papan Pemuka Pelajar - UniWise" />
 
             {/* Dynamic Hero Banner (Midnight Navy + Ambient Glow) */}
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950 p-6 md:p-8 text-white shadow-xl mb-8 border border-slate-800/80">

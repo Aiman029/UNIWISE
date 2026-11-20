@@ -53,8 +53,8 @@ class ProfileController extends Controller
         if ($request->filled('new_password')) {
             if (! $request->filled('current_password') || ! Hash::check($request->current_password, $user->password)) {
                 return back()->withErrors([
-                    'current_password' => 'Your current password/New password is not matched',
-                ])->with('error', 'Your current password/New password is not matched');
+                    'current_password' => 'Kata laluan semasa atau pengesahan kata laluan baharu tidak sepadan.',
+                ])->with('error', 'Kata laluan semasa atau pengesahan kata laluan baharu tidak sepadan.');
             }
 
             $user->password = Hash::make($request->new_password);
@@ -72,6 +72,6 @@ class ProfileController extends Controller
         $user->name = $request->name;
         $user->save();
 
-        return redirect()->route('profile.show')->with('success', 'PROFILE UPDATE SUCCESSFULLY');
+        return redirect()->route('profile.show')->with('success', 'PROFIL BERJAYA DIKEMASKINI');
     }
 }

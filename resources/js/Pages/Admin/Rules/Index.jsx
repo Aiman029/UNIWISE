@@ -104,20 +104,20 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
 
     return (
         <AdminLayout activePage="recommendation-rules">
-            <Head title="Recommendation Rules Management - UniWise Admin" />
+            <Head title="Pengurusan Peraturan Padanan - Pentadbir UniWise" />
 
             <div className="max-w-7xl mx-auto space-y-6">
-                {/* Header matching Figure 3.2.1.9.2 */}
+                {/* Header */}
                 <div className="bg-gradient-to-r from-sky-600 to-indigo-700 rounded-3xl p-6 md:p-8 text-white shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                         <span className="text-xs font-bold uppercase tracking-widest text-sky-200">
-                            ENJIN SYORAN & PEMADANAN
+                            ENJIN SYORAN &amp; PEMADANAN
                         </span>
                         <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mt-1">
-                            RECOMMENDATION RULES MANAGEMENT
+                            PENGURUSAN PERATURAN PADANAN
                         </h1>
                         <p className="text-xs text-sky-100 mt-1">
-                            Petakan trait RIASEC dan syarat gred minimum kepada program pengajian IPTA.
+                            Petakan dimensi RIASEC dan syarat gred minimum kepada program pengajian IPTA.
                         </p>
                     </div>
 
@@ -128,7 +128,7 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
                             className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-md transition"
                         >
                             <Plus className="w-4 h-4" />
-                            <span>+ ADD NEW RULE</span>
+                            <span>TAMBAH PERATURAN BAHARU</span>
                         </button>
                     </div>
                 </div>
@@ -173,11 +173,11 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
                             <thead>
                                 <tr className="bg-sky-600 text-white font-extrabold uppercase tracking-wider text-[11px]">
                                     <th className="py-3.5 px-4 text-center w-12">#</th>
-                                    <th className="py-3.5 px-4 text-center">RIASEC TYPE</th>
-                                    <th className="py-3.5 px-5">PROGRAMME NAME</th>
-                                    <th className="py-3.5 px-5">INSTITUTION</th>
-                                    <th className="py-3.5 px-4 text-center">MIN GRADE</th>
-                                    <th className="py-3.5 px-5 text-right">ACTION</th>
+                                    <th className="py-3.5 px-4 text-center">DIMENSI RIASEC</th>
+                                    <th className="py-3.5 px-5">NAMA PROGRAM</th>
+                                    <th className="py-3.5 px-5">INSTITUSI</th>
+                                    <th className="py-3.5 px-4 text-center">GRED MIN</th>
+                                    <th className="py-3.5 px-5 text-right">TINDAKAN</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100 font-medium">
@@ -294,33 +294,33 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
                             </div>
                             <div>
                                 <h3 className="text-base font-black uppercase text-slate-900">
-                                    ADD RECOMMENDATION RULE
+                                    TAMBAH PERATURAN PADANAN
                                 </h3>
                                 <p className="text-xs text-slate-500">
-                                    Petakan jenis RIASEC kepada program pengajian
+                                    Petakan dimensi RIASEC kepada program pengajian
                                 </p>
                             </div>
                         </div>
 
                         <form onSubmit={submitAdd} className="space-y-4 text-xs font-semibold">
                             <div>
-                                <label className="block text-slate-700 mb-1">Jenis RIASEC (RIASEC Type)</label>
+                                <label className="block text-slate-700 mb-1">Dimensi RIASEC</label>
                                 <select
                                     value={formData.riasec_type}
                                     onChange={(e) => setFormData({ ...formData, riasec_type: e.target.value })}
                                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 font-bold"
                                 >
-                                    <option value="Realistic">Realistic (R)</option>
-                                    <option value="Investigative">Investigative (I)</option>
-                                    <option value="Artistic">Artistic (A)</option>
-                                    <option value="Social">Social (S)</option>
+                                    <option value="Realistic">Realistik (R)</option>
+                                    <option value="Investigative">Investigatif (I)</option>
+                                    <option value="Artistic">Artistik (A)</option>
+                                    <option value="Social">Sosial (S)</option>
                                     <option value="Enterprising">Enterprising (E)</option>
-                                    <option value="Conventional">Conventional (C)</option>
+                                    <option value="Conventional">Konvensional (C)</option>
                                 </select>
                             </div>
 
                             <div>
-                                <label className="block text-slate-700 mb-1">Pilih Program Pengajian (Programme)</label>
+                                <label className="block text-slate-700 mb-1">Pilih Program Pengajian</label>
                                 <select
                                     value={formData.programme_id}
                                     onChange={(e) => setFormData({ ...formData, programme_id: e.target.value })}
@@ -335,7 +335,7 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
                             </div>
 
                             <div>
-                                <label className="block text-slate-700 mb-1">Gred Minimum SPM (Min Grade)</label>
+                                <label className="block text-slate-700 mb-1">Gred Minimum SPM</label>
                                 <select
                                     value={formData.min_grade}
                                     onChange={(e) => setFormData({ ...formData, min_grade: e.target.value })}
@@ -361,7 +361,7 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
                                     type="submit"
                                     className="w-1/2 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-md transition uppercase tracking-wider"
                                 >
-                                    ADD RULE
+                                    TAMBAH PERATURAN
                                 </button>
                             </div>
                         </form>
@@ -369,7 +369,7 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
                 </div>
             )}
 
-            {/* Edit Rule Modal matching Figure 3.2.1.9.4 */}
+            {/* Edit Rule Modal */}
             {isEditModalOpen && selectedRule && (
                 <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
                     <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 animate-scale-in border border-slate-200 relative">
@@ -387,7 +387,7 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
                             </div>
                             <div>
                                 <h3 className="text-base font-black uppercase text-slate-900">
-                                    EDIT RECOMMENDATION RULE
+                                    SUNTING PERATURAN PADANAN
                                 </h3>
                                 <p className="text-xs text-slate-500">
                                     Kemaskini padanan RIASEC atau gred minimum
@@ -397,23 +397,23 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
 
                         <form onSubmit={submitEdit} className="space-y-4 text-xs font-semibold">
                             <div>
-                                <label className="block text-slate-700 mb-1">Jenis RIASEC (RIASEC Type)</label>
+                                <label className="block text-slate-700 mb-1">Dimensi RIASEC</label>
                                 <select
                                     value={formData.riasec_type}
                                     onChange={(e) => setFormData({ ...formData, riasec_type: e.target.value })}
                                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 font-bold"
                                 >
-                                    <option value="Realistic">Realistic (R)</option>
-                                    <option value="Investigative">Investigative (I)</option>
-                                    <option value="Artistic">Artistic (A)</option>
-                                    <option value="Social">Social (S)</option>
+                                    <option value="Realistic">Realistik (R)</option>
+                                    <option value="Investigative">Investigatif (I)</option>
+                                    <option value="Artistic">Artistik (A)</option>
+                                    <option value="Social">Sosial (S)</option>
                                     <option value="Enterprising">Enterprising (E)</option>
-                                    <option value="Conventional">Conventional (C)</option>
+                                    <option value="Conventional">Konvensional (C)</option>
                                 </select>
                             </div>
 
                             <div>
-                                <label className="block text-slate-700 mb-1">Pilih Program Pengajian (Programme)</label>
+                                <label className="block text-slate-700 mb-1">Pilih Program Pengajian</label>
                                 <select
                                     value={formData.programme_id}
                                     onChange={(e) => setFormData({ ...formData, programme_id: e.target.value })}
@@ -428,7 +428,7 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
                             </div>
 
                             <div>
-                                <label className="block text-slate-700 mb-1">Gred Minimum SPM (Min Grade)</label>
+                                <label className="block text-slate-700 mb-1">Gred Minimum SPM</label>
                                 <select
                                     value={formData.min_grade}
                                     onChange={(e) => setFormData({ ...formData, min_grade: e.target.value })}
@@ -454,7 +454,7 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
                                     type="submit"
                                     className="w-1/2 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-md transition uppercase tracking-wider"
                                 >
-                                    UPDATE RULE
+                                    KEMAS KINI PERATURAN
                                 </button>
                             </div>
                         </form>
@@ -462,7 +462,7 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
                 </div>
             )}
 
-            {/* Delete Confirmation Modal matching Figure 3.2.1.9.6 */}
+            {/* Delete Confirmation Modal */}
             {isDeleteModalOpen && selectedRule && (
                 <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
                     <div className="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 text-center animate-scale-in border border-slate-200">
@@ -471,7 +471,7 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
                         </div>
 
                         <h3 className="text-base font-black text-slate-900 uppercase">
-                            ARE YOU SURE WANT TO DELETE THIS RULE?
+                            ADAKAH ANDA PASTI MAHU MEMADAM PERATURAN INI?
                         </h3>
                         <p className="text-xs font-bold text-slate-700 mt-2 uppercase">
                             {selectedRule.programme?.name}
@@ -486,14 +486,14 @@ export default function RecommendationRuleIndex({ rules, programmes = [], filter
                                 onClick={() => setIsDeleteModalOpen(false)}
                                 className="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition uppercase"
                             >
-                                CANCEL
+                                BATAL
                             </button>
                             <button
                                 type="button"
                                 onClick={confirmDelete}
                                 className="w-1/2 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition uppercase"
                             >
-                                DELETE
+                                PADAM
                             </button>
                         </div>
                     </div>

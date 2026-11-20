@@ -64,7 +64,7 @@ class RecommendationRuleController extends Controller
 
         RecommendationRule::create($validated);
 
-        return redirect()->back()->with('success', 'NEW RULE SUCCESSFULLY ADDED');
+        return redirect()->back()->with('success', 'PERATURAN BAHARU BERJAYA DITAMBAH');
     }
 
     /**
@@ -80,7 +80,7 @@ class RecommendationRuleController extends Controller
 
         $rule->update($validated);
 
-        return redirect()->back()->with('success', 'RULE UPDATE SUCCESSFULLY');
+        return redirect()->back()->with('success', 'PERATURAN BERJAYA DIKEMASKINI');
     }
 
     /**
@@ -90,6 +90,6 @@ class RecommendationRuleController extends Controller
     {
         $rule->delete();
 
-        return redirect()->back()->with('success', 'RULE DELETE SUCCESSFULLY');
+        return redirect()->back()->with('success', 'PERATURAN BERJAYA DIPADAM');
     }
 }

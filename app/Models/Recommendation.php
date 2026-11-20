@@ -16,6 +16,7 @@ class Recommendation extends Model
         'merit_score',
         'dominant_trait',
         'riasec_scores',
+        'imks_result',
         'spm_snapshot',
         'date_generated',
     ];
@@ -24,6 +25,7 @@ class Recommendation extends Model
     {
         return [
             'riasec_scores' => 'array',
+            'imks_result' => 'array',
             'spm_snapshot' => 'array',
             'merit_score' => 'float',
             'date_generated' => 'datetime',
